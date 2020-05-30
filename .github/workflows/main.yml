@@ -1,0 +1,23 @@
+name: Gatsby Publish
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: npm install
+      - run: npm run build
+      - uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: ${{ secrets.DOMAIN_NAME }}
+          project: 'public'
+          login: ${{ secrets.SURGE_LOGIN }}
+          token: ${{ secrets.SURGE_TOKEN }}
