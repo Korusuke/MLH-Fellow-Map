@@ -1,6 +1,6 @@
 ---
 name: Yash Kumar Verma
-profilepic: yashkumarverma.png
+profilepic: yashkumarverma.jpg
 github: yashkumarverma
 twitter: yash_kr_verma
 linkedin: yash-kumar-verma

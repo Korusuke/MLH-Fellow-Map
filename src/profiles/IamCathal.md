@@ -1,5 +1,6 @@
 ---
 name: Cathal OCallaghan
+profilepic: profiler.jpeg
 github: IamCathal
 twitter: monameiscathal
 linkedin: cathal-o-callaghan-2329b7175
