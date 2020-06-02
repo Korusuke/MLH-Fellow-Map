@@ -12,14 +12,8 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: "12.x" 
+          node-version: "12.x"
       - run: npm install
-      - run: npm run build
-      - name: Fellows Pics Optimize
-      - uses: xprilion/img-resizer-inplace@v1
-        with:
-          target: "static/images"
-          dimensions: "300x"
       - run: npm run build
       - uses: dswistowski/surge-sh-action@v1
         with:
