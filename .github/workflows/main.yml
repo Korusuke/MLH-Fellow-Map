@@ -14,12 +14,14 @@ jobs:
         with:
           node-version: "12.x" 
       - run: npm install
+      - run: npm run build
       - name: Fellows Pics Optimize
       - uses: xprilion/img-resizer-inplace@v1
         with:
           target: "static/images"
           dimensions: "300x"
-      - run: npm run build
+      - name: Build
+        run: REACT_APP_CACHE_BUST=${{ github.sha }} npm run build
       - uses: dswistowski/surge-sh-action@v1
         with:
           domain: ${{ secrets.DOMAIN_NAME }}
