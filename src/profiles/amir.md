@@ -4,6 +4,6 @@ profilepic: amir.jpeg
 github: AmirYalamov
 linkedin: amiryalamov
 description: Hey I'm Amir, an undergraduate Computer Science student at Western University! 
-lat: '43.5890'
-long: '79.6441'
+lat: '43.5890° N'
+long: '79.6441° W'
 ---
