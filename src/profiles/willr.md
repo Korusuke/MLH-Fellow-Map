@@ -1,6 +1,6 @@
 ---
 name: Will Russell
-profilepic: willr.png
+profilepic: willr.jpg
 github: wrussell1999
 twitter: wrussell1999
 linkedin: wrussell1999
