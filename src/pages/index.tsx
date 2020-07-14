@@ -12,7 +12,9 @@ const LOCATION = {
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
-const IndexPage = ({ data }: { data: any /*TODO type!!*/ }) => {
+// TODO type GraphQL Request!!
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const IndexPage = ({ data }: { data: any }) => {
   const allProfiles = data.allMarkdownRemark.nodes;
 
   function mapEffect(baseMap: { leafletElement: L.Map } | null) {
