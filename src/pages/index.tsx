@@ -12,15 +12,11 @@ const LOCATION = {
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
-const IndexPage = ({ data }: {data: any}) => {
+const IndexPage = ({ data }: { data: any }) => {
   const allProfiles = data.allMarkdownRemark.nodes;
 
-  async function mapEffect({
-    leafletElement = {},
-  }: {
-    leafletElement: any;
-  }) {
-    if (!leafletElement) return;
+  function mapEffect({ map }: { map: L.Map | null }) {
+    if (!map) return;
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = allProfiles[i].frontmatter;
       const center = new L.LatLng(fellow.lat, fellow.long);
@@ -53,7 +49,7 @@ const IndexPage = ({ data }: {data: any}) => {
           iconSize: [50, 50],
         }),
       })
-        .addTo(leafletElement)
+        .addTo(map)
         .bindPopup(profilePop);
     }
   }
@@ -74,7 +70,7 @@ const IndexPage = ({ data }: {data: any}) => {
           rel="stylesheet"
         />
       </Helmet>
-      <Map {...mapSettings}></Map>
+      <Map {...mapSettings} />
     </Layout>
   );
 };

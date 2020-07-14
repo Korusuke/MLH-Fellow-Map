@@ -1,9 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactElement } from 'react';
 import { Helmet } from 'react-helmet';
 
 import 'assets/stylesheets/application.scss';
-const Layout = ({ children, pageName }) => {
+
+const Layout = ({
+  children,
+  pageName,
+}: {
+  children?: ReactElement[] | ReactElement;
+  pageName?: string;
+}) => {
   let className = '';
 
   if (pageName) {
@@ -20,11 +26,6 @@ const Layout = ({ children, pageName }) => {
       </div>
     </>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-  pageName: PropTypes.string,
 };
 
 export default Layout;

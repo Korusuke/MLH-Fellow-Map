@@ -33,6 +33,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
 
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off", // temp until we work out how to remove all use of 'any'
 
     "prettier/prettier": "warn",
   },

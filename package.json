@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.5.16",
+    "@types/react-dom": "^16.9.8",
     "@types/react-helmet": "^6.0.0",
     "@types/react-leaflet": "^2.5.2",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
@@ -56,6 +57,7 @@
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "typecheck": "tsc --noEmit",
     "start": "yarn develop",
     "serve": "gatsby serve",
     "test": "jest --config ./config/jest.config.js"

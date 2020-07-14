@@ -1,4 +1,6 @@
-export const mapServices = [
+import { SimpleMapService } from '../lib/map-services';
+
+export const mapServices: SimpleMapService[] = [
   {
     name: 'OpenStreetMap',
     attribution:
