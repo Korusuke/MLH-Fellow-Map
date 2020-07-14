@@ -4,6 +4,8 @@ import L from 'leaflet';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
+import PortfolioModal from '../components/PortfolioModal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LOCATION = {
   lat: 0,
@@ -75,6 +77,7 @@ const IndexPage = ({ data }: { data: any }) => {
         />
       </Helmet>
       <Map {...mapSettings} />
+      <PortfolioModal />
     </Layout>
   );
 };

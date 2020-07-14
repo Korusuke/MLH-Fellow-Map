@@ -1,9 +1,8 @@
 .map {
 
-  position: relative;
+  position: fixed;
 
-  &,
-  .map-base {
+  &, .map-base {
     width: 100%;
     height: 100%;
     background: #acd3de;
@@ -34,3 +33,4 @@
   }
 
 }
+
