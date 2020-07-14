@@ -66,8 +66,7 @@
   },
   "lint-staged": {
     "**/*.js": [
-      "yarn format",
-      "yarn lint"
+      "yarn format"
     ]
   },
   "repository": {
