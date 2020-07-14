@@ -6,7 +6,7 @@ import 'assets/stylesheets/application.scss';
 const Layout = ({ children, pageName }) => {
   let className = '';
 
-  if ( pageName ) {
+  if (pageName) {
     className = `${className} page-${pageName}`;
   }
 
@@ -16,7 +16,7 @@ const Layout = ({ children, pageName }) => {
         <title>MLH Fellows</title>
       </Helmet>
       <div className="wrapper">
-        <main>{ children }</main>
+        <main>{children}</main>
       </div>
     </>
   );
