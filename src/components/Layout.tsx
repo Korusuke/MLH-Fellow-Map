@@ -1,12 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactElement } from 'react';
 import { Helmet } from 'react-helmet';
 
 import 'assets/stylesheets/application.scss';
-const Layout = ({ children, pageName }) => {
+
+const Layout = ({
+  children,
+  pageName,
+}: {
+  children?: ReactElement[] | ReactElement;
+  pageName?: string;
+}) => {
   let className = '';
 
-  if ( pageName ) {
+  if (pageName) {
     className = `${className} page-${pageName}`;
   }
 
@@ -16,15 +22,10 @@ const Layout = ({ children, pageName }) => {
         <title>MLH Fellows</title>
       </Helmet>
       <div className="wrapper">
-        <main>{ children }</main>
+        <main>{children}</main>
       </div>
     </>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-  pageName: PropTypes.string,
 };
 
 export default Layout;
