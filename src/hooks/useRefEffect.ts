@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from 'react';
 
-function useRefEffect<T = never>({
+function useRefEffect<T = unknown>({
   effect,
   ref,
 }: {
