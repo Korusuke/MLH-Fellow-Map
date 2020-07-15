@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import L from 'leaflet';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
 import PortfolioModal from '../components/PortfolioModal';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import ReactDOMServer from 'react-dom/server';
+import { Button } from 'reactstrap';
 
 const LOCATION = {
   lat: 0,
@@ -14,45 +15,42 @@ const LOCATION = {
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
+export interface FellowType {
+  name: string;
+  profilepic: string; // link or name of locally stored image
+  description: string;
+  github: string;
+  linkedin: string;
+  twitter: string;
+  lat: number;
+  long: number;
+}
+
 // TODO type GraphQL Request!!
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const IndexPage = ({ data }: { data: any }) => {
-  const allProfiles = data.allMarkdownRemark.nodes;
+const IndexPage = ({
+  data: { allMarkdownRemark, allImageSharp },
+}: {
+  data: any;
+}) => {
+  const allProfiles = allMarkdownRemark.nodes;
   const allProfilePics: { [index: string]: string } = {};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data.allImageSharp.nodes.forEach((ele: any) => {
+  allImageSharp.nodes.forEach((ele: any) => {
     allProfilePics[ele.fluid.originalName] = ele.fluid.src;
   });
+
+  const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
+  const [chosenFellow, setChosenFellow] = useState<FellowType | null>(null);
 
   function mapEffect(baseMap: { leafletElement: L.Map } | null) {
     if (!baseMap) return;
     const { leafletElement } = baseMap;
 
     for (let i = 0; i < allProfiles.length; i++) {
-      const fellow = allProfiles[i].frontmatter;
+      const fellow = allProfiles[i].frontmatter as FellowType;
       const center = new L.LatLng(fellow.lat, fellow.long);
-      let social = '';
-      if (fellow.github) {
-        social += `<a href='https://github.com/${fellow.github}' target='_blank' rel="noreferrer"><i class="fab fa-github"></i></a>`;
-      }
-      if (fellow.linkedin) {
-        social += `<a href='https://www.linkedin.com/in/${fellow.linkedin}' target='_blank' rel="noreferrer"><i class="fab fa-linkedin"></i></a>`;
-      }
-      if (fellow.twitter) {
-        social += `<a href='https://twitter.com/${fellow.twitter}' target='_blank' rel="noreferrer"><i class="fab fa-twitter"></i></a>`;
-      }
-
-      const profilePop = `
-          <div class="profile">
-            <div><h3>${fellow.name}</h3></div>
-            <div><h4>${fellow.description}</h4></div>
-            <div class='divider'></div>
-            <div class='social-links'>
-              ${social}
-            </div>
-          </div>
-        `;
 
       L.marker(center, {
         icon: L.icon({
@@ -62,7 +60,15 @@ const IndexPage = ({ data }: { data: any }) => {
         }),
       })
         .addTo(leafletElement)
-        .bindPopup(profilePop);
+        .bindPopup(
+          ReactDOMServer.renderToString(
+            <MapPopup
+              setPortfolioModalOpen={setPortfolioModalOpen}
+              setChosenFellow={setChosenFellow}
+              fellow={fellow}
+            />,
+          ),
+        );
     }
   }
 
@@ -83,10 +89,83 @@ const IndexPage = ({ data }: { data: any }) => {
         />
       </Helmet>
       <Map {...mapSettings} />
-      <PortfolioModal />
+      <PortfolioModal
+        isOpen={isPortfolioModalOpen}
+        setOpen={setPortfolioModalOpen}
+        fellow={chosenFellow || undefined}
+      />
     </Layout>
   );
 };
+
+function MapPopup({
+  fellow,
+  setChosenFellow,
+  setPortfolioModalOpen,
+}: {
+  fellow: FellowType;
+  setChosenFellow: (val: FellowType) => void;
+  setPortfolioModalOpen: (val: boolean) => void;
+}) {
+  const socialLinks = [];
+  if (fellow.github) {
+    socialLinks.push(
+      <a
+        href={`https://github.com/${fellow.github}`}
+        target="_blank"
+        rel="noreferrer"
+        key={0}
+      >
+        <i className="fab fa-github" />
+      </a>,
+    );
+  }
+  if (fellow.linkedin) {
+    socialLinks.push(
+      <a
+        href={`https://www.linkedin.com/in/${fellow.linkedin}`}
+        target="_blank"
+        rel="noreferrer"
+        key={1}
+      >
+        <i className="fab fa-github" />
+      </a>,
+    );
+  }
+  if (fellow.twitter) {
+    socialLinks.push(
+      <a
+        href={`https://twitter.com/${fellow.twitter}`}
+        target="_blank"
+        rel="noreferrer"
+        key={2}
+      >
+        <i className="fab fa-github" />
+      </a>,
+    );
+  }
+
+  return (
+    <div className="profile">
+      <div>
+        <h3>{fellow.name}</h3>
+      </div>
+      <div>
+        <h4>{fellow.description}</h4>
+      </div>
+      <div className="divider" />
+      <div className="social-links">{socialLinks}</div>
+      <Button
+        onClick={() => {
+          setChosenFellow(fellow);
+          setPortfolioModalOpen(true);
+        }}
+      >
+        More Details
+      </Button>
+    </div>
+  );
+}
 
 export default IndexPage;
 

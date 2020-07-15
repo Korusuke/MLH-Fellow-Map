@@ -6676,11 +6676,6 @@ gatsby-plugin-react-leaflet@2.0.13:
   resolved "https://registry.yarnpkg.com/gatsby-plugin-react-leaflet/-/gatsby-plugin-react-leaflet-2.0.13.tgz#7214e08c0b9984317c10c9de71a5e51420b9c0de"
   integrity sha512-8QGG7il+ErQfX6PyNnQGsunGrKuaFblV63aIgY7d5WOyXYZARyrAh3U+kneeBcuSgJa1Xw/fJdAHvi2vC0wR+w==
 
-gatsby-plugin-resolve-src@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-resolve-src/-/gatsby-plugin-resolve-src-2.1.0.tgz#290fec7dc7b55d05a41827b106aa04968b7549ba"
-  integrity sha512-uffIv/7VD4HLvMlxl6J9zzK9Y5L2jhrU+uDXzpAKHp6kWH/zNjgbnuE1UD05Z/xo7o4ngDkk2+GWOmcbQQRIXw==
-
 gatsby-plugin-sass@^2.3.1:
   version "2.3.12"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-sass/-/gatsby-plugin-sass-2.3.12.tgz#4ebdf2d541004e60a5d108eb1302a43b16ceeeaf"

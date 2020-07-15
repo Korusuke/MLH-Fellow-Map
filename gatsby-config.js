@@ -1,6 +1,5 @@
 module.exports = {
   plugins: [
-    'gatsby-plugin-resolve-src',
     'gatsby-plugin-sass',
     'gatsby-plugin-react-helmet',
     {
@@ -11,6 +10,7 @@ module.exports = {
       },
     },
     'gatsby-plugin-react-leaflet',
+    // Image Processing using Sharp IMG Utils
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
