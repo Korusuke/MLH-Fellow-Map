@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Helmet } from 'react-helmet';
 
-import 'assets/stylesheets/application.scss';
+import '../assets/stylesheets/application.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Layout = ({
   children,

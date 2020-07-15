@@ -1,6 +1,6 @@
 ---
 name: Lakshya Khatri
-profilepic: lakshya.png
+profilepic: lakshya.jpg
 github: LakshyaKhatri
 twitter: lakshyakhatri_
 linkedin: LakshyaKhatri

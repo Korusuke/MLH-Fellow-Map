@@ -70,3 +70,5 @@ yarn-error.log
 
 # IDE
 .idea/
+# Gatsby Generated Types
+/graphql-types.ts

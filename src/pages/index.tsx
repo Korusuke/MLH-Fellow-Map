@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { ReactElement, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import L from 'leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
+import PortfolioModal from '../components/PortfolioModal';
+import { Button } from 'reactstrap';
+// Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
+import { FellowDataQuery } from '../../graphql-types';
+import { Marker, Popup } from 'react-leaflet';
+import { Fellow, FellowType } from '../data/fellow-type';
 
 const LOCATION = {
   lat: 0,
@@ -12,63 +19,81 @@ const LOCATION = {
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
-// TODO type GraphQL Request!!
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const IndexPage = ({ data }: { data: any }) => {
-  const allProfiles = data.allMarkdownRemark.nodes;
-  const allProfilePics: { [index: string]: string } = {};
+const IndexPage = ({
+  data: { allMarkdownRemark, allImageSharp },
+}: {
+  data: FellowDataQuery;
+}) => {
+  const allProfiles = allMarkdownRemark.nodes;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data.allImageSharp.nodes.forEach((ele: any) => {
-    allProfilePics[ele.fluid.originalName] = ele.fluid.src;
-  });
+  const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
+  const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
-  function mapEffect(baseMap: { leafletElement: L.Map } | null) {
-    if (!baseMap) return;
-    const { leafletElement } = baseMap;
+  const createClusterCustomIcon = (cluster: { getChildCount: () => void }) => {
+    return L.divIcon({
+      html: `<span>${cluster.getChildCount()}</span>`,
+      className: 'marker-cluster-custom',
+      iconSize: L.point(50, 50, true),
+    });
+  };
+
+  // we likely don't want to generate this every render haha
+  const markers = useMemo(() => {
+    const ret: ReactElement[] = [];
 
     for (let i = 0; i < allProfiles.length; i++) {
-      const fellow = allProfiles[i].frontmatter;
+      const fellow = new Fellow(
+        allProfiles[i].frontmatter as FellowType,
+        allImageSharp,
+      );
+
       const center = new L.LatLng(fellow.lat, fellow.long);
-      let social = '';
-      if (fellow.github) {
-        social += `<a href='https://github.com/${fellow.github}' target='_blank' rel="noreferrer"><i class="fab fa-github"></i></a>`;
-      }
-      if (fellow.linkedin) {
-        social += `<a href='https://www.linkedin.com/in/${fellow.linkedin}' target='_blank' rel="noreferrer"><i class="fab fa-linkedin"></i></a>`;
-      }
-      if (fellow.twitter) {
-        social += `<a href='https://twitter.com/${fellow.twitter}' target='_blank' rel="noreferrer"><i class="fab fa-twitter"></i></a>`;
-      }
 
-      const profilePop = `
-          <div class="profile">
-            <div><h3>${fellow.name}</h3></div>
-            <div><h4>${fellow.description}</h4></div>
-            <div class='divider'></div>
-            <div class='social-links'>
-              ${social}
-            </div>
-          </div>
-        `;
-
-      L.marker(center, {
-        icon: L.icon({
-          className: 'icon',
-          iconUrl: `${allProfilePics[fellow.profilepic]}`,
-          iconSize: [50, 50],
-        }),
-      })
-        .addTo(leafletElement)
-        .bindPopup(profilePop);
+      ret.push(
+        <Marker
+          position={center}
+          key={fellow.name + fellow.lat}
+          icon={L.icon({
+            className: 'icon',
+            iconUrl:
+              fellow.profilePictureUrl ||
+              allImageSharp.nodes.find((ele) => {
+                if (!ele || !ele.fluid) return false;
+                return ele.fluid.originalName === 'mlh.png';
+              })?.fluid?.src ||
+              'none',
+            iconSize: [50, 50],
+          })}
+        >
+          <Popup>
+            <MapPopup
+              setPortfolioModalOpen={setPortfolioModalOpen}
+              setChosenFellow={setChosenFellow}
+              fellow={fellow}
+            />
+          </Popup>
+        </Marker>,
+      );
     }
-  }
+    return (
+      <MarkerClusterGroup
+        showCoverageOnHover={false}
+        iconCreateFunction={createClusterCustomIcon}
+      >
+        {ret}
+      </MarkerClusterGroup>
+    );
+  }, [
+    setPortfolioModalOpen,
+    setChosenFellow,
+    allImageSharp,
+    allMarkdownRemark,
+  ]);
 
   const mapSettings = {
     center: CENTER,
     defaultBaseMap: 'OpenStreetMap',
     zoom: DEFAULT_ZOOM,
-    mapEffect,
   };
 
   return (
@@ -80,15 +105,91 @@ const IndexPage = ({ data }: { data: any }) => {
           rel="stylesheet"
         />
       </Helmet>
-      <Map {...mapSettings} />
+      <Map {...mapSettings}>{markers}</Map>
+      <PortfolioModal
+        isOpen={isPortfolioModalOpen}
+        setOpen={setPortfolioModalOpen}
+        fellow={chosenFellow || undefined}
+      />
     </Layout>
   );
 };
 
+function MapPopup({
+  fellow,
+  setChosenFellow,
+  setPortfolioModalOpen,
+}: {
+  fellow: Fellow;
+  setChosenFellow: (val: Fellow) => void;
+  setPortfolioModalOpen: (val: boolean) => void;
+}) {
+  const socialLinks = [];
+  if (fellow.github) {
+    socialLinks.push(
+      <a
+        href={`https://github.com/${fellow.github}`}
+        target="_blank"
+        rel="noreferrer"
+        key={0}
+      >
+        <i className="fab fa-github" />
+      </a>,
+    );
+  }
+  if (fellow.linkedin) {
+    socialLinks.push(
+      <a
+        href={`https://www.linkedin.com/in/${fellow.linkedin}`}
+        target="_blank"
+        rel="noreferrer"
+        key={1}
+      >
+        <i className="fab fa-linkedin" />
+      </a>,
+    );
+  }
+  if (fellow.twitter) {
+    socialLinks.push(
+      <a
+        href={`https://twitter.com/${fellow.twitter}`}
+        target="_blank"
+        rel="noreferrer"
+        key={2}
+      >
+        <i className="fab fa-twitter" />
+      </a>,
+    );
+  }
+
+  return (
+    <div className="profile text-center">
+      <div>
+        <h4>{fellow.name}</h4>
+      </div>
+      <div>
+        <p>{fellow.description}</p>
+      </div>
+      <div className="divider" />
+      <div className="social-links">{socialLinks}</div>
+      <Button
+        className="mt-4"
+        color={'success'}
+        onClick={() => {
+          setChosenFellow(fellow);
+          setPortfolioModalOpen(true);
+        }}
+      >
+        More Details
+      </Button>
+    </div>
+  );
+}
+
 export default IndexPage;
 
 export const profiles = graphql`
-  query MyQuery {
+  query FellowData {
     allMarkdownRemark {
       nodes {
         frontmatter {
