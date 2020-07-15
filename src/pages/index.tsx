@@ -1,15 +1,15 @@
 import React, { ReactElement, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import L, { marker } from 'leaflet';
+import L from 'leaflet';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
 import PortfolioModal from '../components/PortfolioModal';
-import ReactDOMServer from 'react-dom/server';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
+import { Fellow, FellowType } from '../data/fellow-type';
 
 const LOCATION = {
   lat: 0,
@@ -18,50 +18,35 @@ const LOCATION = {
 const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
-export interface FellowType {
-  name: string;
-  profilepic: string; // link or name of locally stored image
-  description: string;
-  github: string;
-  linkedin: string;
-  twitter: string;
-  lat: string;
-  long: string;
-}
-
 const IndexPage = ({
   data: { allMarkdownRemark, allImageSharp },
 }: {
   data: FellowDataQuery;
 }) => {
   const allProfiles = allMarkdownRemark.nodes;
-  const allProfilePics: { [index: string]: string } = {};
-
-  allImageSharp.nodes.forEach((ele) => {
-    if (!ele.fluid || !ele.fluid.originalName) return;
-    allProfilePics[ele.fluid.originalName] = ele.fluid.src;
-  });
 
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
-  const [chosenFellow, setChosenFellow] = useState<FellowType | null>(null);
+  const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
 
     for (let i = 0; i < allProfiles.length; i++) {
-      const fellow = allProfiles[i].frontmatter as FellowType;
-      const center = new L.LatLng(
-        parseFloat(fellow.lat),
-        parseFloat(fellow.long),
+      const fellow = new Fellow(
+        allProfiles[i].frontmatter as FellowType,
+        allImageSharp,
       );
+
+      const center = new L.LatLng(fellow.lat, fellow.long);
+
       ret.push(
         <Marker
           position={center}
           key={fellow.name + fellow.lat}
           icon={L.icon({
             className: 'icon',
-            iconUrl: allProfilePics[fellow.profilepic] || 'none', // TODO do something for missing image
+            iconUrl: fellow.profilePictureUrl || 'none', // TODO handle missing img
             iconSize: [50, 50],
           })}
         >
@@ -113,8 +98,8 @@ function MapPopup({
   setChosenFellow,
   setPortfolioModalOpen,
 }: {
-  fellow: FellowType;
-  setChosenFellow: (val: FellowType) => void;
+  fellow: Fellow;
+  setChosenFellow: (val: Fellow) => void;
   setPortfolioModalOpen: (val: boolean) => void;
 }) {
   const socialLinks = [];

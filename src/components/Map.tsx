@@ -1,6 +1,6 @@
-import React, { createRef, FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Map as BaseMap, TileLayer, ZoomControl } from 'react-leaflet';
-import { useConfigureLeaflet, useMapServices, useRefEffect } from '../hooks';
+import { useConfigureLeaflet } from '../hooks';
 import { isDomAvailable } from '../lib/util';
 import { getMapServiceByName } from '../lib/map-services';
 

@@ -1,13 +1,15 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
-import { Container } from 'reactstrap';
-import { FellowType } from '../pages';
+import React, { createRef, useEffect } from 'react';
+import { Button, Container } from 'reactstrap';
+import { Fellow } from '../data/fellow-type';
+
 function PortfolioModal({
   isOpen,
   setOpen,
+  fellow,
 }: {
   isOpen: boolean;
   setOpen: (val: boolean) => void;
-  fellow?: FellowType;
+  fellow?: Fellow;
 }) {
   const modalRef = createRef<HTMLDivElement>();
 
@@ -26,17 +28,28 @@ function PortfolioModal({
         style.minHeight = (null as unknown) as string;
         style.overflowY = (null as unknown) as string;
         style.height = (null as unknown) as string;
-      }, 300);
+      }, 300); // length of animation, may have to be changed in scss too if changed
     }
   }, [isOpen, modalRef.current]);
 
   return (
     <div className="portfolio-modal" ref={modalRef}>
-      <img
-        className="profile-image"
-        src="/images/willr.jpg"
-        alt="profile pic"
-      />
+      {fellow && (
+        <>
+          <img
+            className="profile-image"
+            src={fellow.profilePictureUrl}
+            alt={`Profile of ${fellow.name}`}
+          />
+          <h3>{fellow.name}</h3>
+          <p>{fellow.description}</p>
+        </>
+      )}
+
+      <Button color="danger" onClick={() => setOpen(false)}>
+        Close
+      </Button>
+
       <Container />
     </div>
   );
