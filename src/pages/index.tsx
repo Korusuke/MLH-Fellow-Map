@@ -16,6 +16,12 @@ const DEFAULT_ZOOM = 3;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IndexPage = ({ data }: { data: any }) => {
   const allProfiles = data.allMarkdownRemark.nodes;
+  const allProfilePics: { [index: string]: string } = {};
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data.allImageSharp.nodes.forEach((ele: any) => {
+    allProfilePics[ele.fluid.originalName] = ele.fluid.src;
+  });
 
   function mapEffect(baseMap: { leafletElement: L.Map } | null) {
     if (!baseMap) return;
@@ -49,7 +55,7 @@ const IndexPage = ({ data }: { data: any }) => {
       L.marker(center, {
         icon: L.icon({
           className: 'icon',
-          iconUrl: `images/${fellow.profilepic}`,
+          iconUrl: `${allProfilePics[fellow.profilepic]}`,
           iconSize: [50, 50],
         }),
       })
@@ -95,6 +101,14 @@ export const profiles = graphql`
           profilepic
           title
           twitter
+        }
+      }
+    }
+    allImageSharp {
+      nodes {
+        fluid(maxHeight: 100, maxWidth: 100) {
+          src
+          originalName
         }
       }
     }
