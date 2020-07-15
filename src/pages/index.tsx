@@ -7,6 +7,8 @@ import { graphql } from 'gatsby';
 import PortfolioModal from '../components/PortfolioModal';
 import ReactDOMServer from 'react-dom/server';
 import { Button } from 'reactstrap';
+// Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
+import { FellowDataQuery } from '../../graphql-types';
 
 const LOCATION = {
   lat: 0,
@@ -22,22 +24,20 @@ export interface FellowType {
   github: string;
   linkedin: string;
   twitter: string;
-  lat: number;
-  long: number;
+  lat: string;
+  long: string;
 }
 
-// TODO type GraphQL Request!!
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const IndexPage = ({
   data: { allMarkdownRemark, allImageSharp },
 }: {
-  data: any;
+  data: FellowDataQuery;
 }) => {
   const allProfiles = allMarkdownRemark.nodes;
   const allProfilePics: { [index: string]: string } = {};
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  allImageSharp.nodes.forEach((ele: any) => {
+  allImageSharp.nodes.forEach((ele) => {
+    if (!ele.fluid || !ele.fluid.originalName) return;
     allProfilePics[ele.fluid.originalName] = ele.fluid.src;
   });
 
@@ -50,7 +50,10 @@ const IndexPage = ({
 
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = allProfiles[i].frontmatter as FellowType;
-      const center = new L.LatLng(fellow.lat, fellow.long);
+      const center = new L.LatLng(
+        parseFloat(fellow.lat),
+        parseFloat(fellow.long),
+      );
 
       L.marker(center, {
         icon: L.icon({
@@ -170,7 +173,7 @@ function MapPopup({
 export default IndexPage;
 
 export const profiles = graphql`
-  query MyQuery {
+  query FellowData {
     allMarkdownRemark {
       nodes {
         frontmatter {
