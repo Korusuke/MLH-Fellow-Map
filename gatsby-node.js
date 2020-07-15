@@ -42,7 +42,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // create profile pages
   const profiles = result.data.allMdx.edges;
   // call `createPage` for each result
-  profiles.forEach(({ node }, index) => {
+  profiles.forEach(({ node }) => {
     createPage({
       // slug that is created before
       path: node.fields.slug,
