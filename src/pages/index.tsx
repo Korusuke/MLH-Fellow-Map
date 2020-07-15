@@ -46,7 +46,13 @@ const IndexPage = ({
           key={fellow.name + fellow.lat}
           icon={L.icon({
             className: 'icon',
-            iconUrl: fellow.profilePictureUrl || 'none', // TODO handle missing img
+            iconUrl:
+              fellow.profilePictureUrl ||
+              allImageSharp.nodes.find((ele) => {
+                if (!ele || !ele.fluid) return false;
+                return ele.fluid.originalName === 'mlh.png';
+              })?.fluid?.src ||
+              'none',
             iconSize: [50, 50],
           })}
         >
