@@ -34,3 +34,33 @@
 
 }
 
+.profile{
+  min-width: 200px;
+  max-width: 400px;
+
+  .social-links{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .divider{
+    border-bottom: 1px black solid;
+    width: 75%;
+    margin: auto auto 1rem;
+  }
+
+  a{
+    text-decoration: none;
+    color: inherit !important;
+  }
+
+  i{
+    font-size: 1.4rem;
+  }
+  p{
+    font-size: 1.3em;
+  }
+
+
+}
+

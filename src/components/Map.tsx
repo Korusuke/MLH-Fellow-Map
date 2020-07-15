@@ -2,6 +2,7 @@ import React, { createRef, FunctionComponent } from 'react';
 import { Map as BaseMap, TileLayer, ZoomControl } from 'react-leaflet';
 import { useConfigureLeaflet, useMapServices, useRefEffect } from '../hooks';
 import { isDomAvailable } from '../lib/util';
+import { getMapServiceByName } from '../lib/map-services';
 
 const DEFAULT_MAP_SERVICE = 'OpenStreetMap';
 
@@ -16,21 +17,13 @@ const Map: FunctionComponent<{
 }) => {
   useConfigureLeaflet();
 
-  const services = useMapServices({
-    names: [...new Set([defaultBaseMap, DEFAULT_MAP_SERVICE])],
-  });
+  const basemap = getMapServiceByName(defaultBaseMap);
 
-  const basemap = services.find((service) => service.name === defaultBaseMap);
-
-  let mapClassName = `map`;
-
-  if (className) {
-    mapClassName = `${mapClassName} ${className}`;
-  }
+  const mapClassName = `map`;
 
   if (!isDomAvailable()) {
     return (
-      <div className={mapClassName}>
+      <div className={`${mapClassName} ${className || ''}`}>
         <p className="map-loading">Loading map...</p>
       </div>
     );

@@ -45,22 +45,23 @@ const IndexPage = ({
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<FellowType | null>(null);
 
+  // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
+
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = allProfiles[i].frontmatter as FellowType;
       const center = new L.LatLng(
         parseFloat(fellow.lat),
         parseFloat(fellow.long),
       );
-
       ret.push(
         <Marker
           position={center}
           key={fellow.name + fellow.lat}
           icon={L.icon({
             className: 'icon',
-            iconUrl: `${allProfilePics[fellow.profilepic]}`,
+            iconUrl: allProfilePics[fellow.profilepic] || 'none', // TODO do something for missing image
             iconSize: [50, 50],
           })}
         >
@@ -81,6 +82,7 @@ const IndexPage = ({
     allImageSharp,
     allMarkdownRemark,
   ]);
+
   const mapSettings = {
     center: CENTER,
     defaultBaseMap: 'OpenStreetMap',
@@ -136,7 +138,7 @@ function MapPopup({
         rel="noreferrer"
         key={1}
       >
-        <i className="fab fa-github" />
+        <i className="fab fa-linkedin" />
       </a>,
     );
   }
@@ -148,22 +150,24 @@ function MapPopup({
         rel="noreferrer"
         key={2}
       >
-        <i className="fab fa-github" />
+        <i className="fab fa-twitter" />
       </a>,
     );
   }
 
   return (
-    <div className="profile">
+    <div className="profile text-center">
       <div>
-        <h3>{fellow.name}</h3>
+        <h4>{fellow.name}</h4>
       </div>
       <div>
-        <h4>{fellow.description}</h4>
+        <p>{fellow.description}</p>
       </div>
       <div className="divider" />
       <div className="social-links">{socialLinks}</div>
       <Button
+        className="mt-4"
+        color={'success'}
         onClick={() => {
           setChosenFellow(fellow);
           setPortfolioModalOpen(true);
