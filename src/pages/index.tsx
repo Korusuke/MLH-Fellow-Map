@@ -20,11 +20,11 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMarkdownRemark, allImageSharp },
+  data: { allMdx, allImageSharp },
 }: {
   data: FellowDataQuery;
 }) => {
-  const allProfiles = allMarkdownRemark.nodes;
+  const allProfiles = allMdx.nodes;
 
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
@@ -83,12 +83,7 @@ const IndexPage = ({
         {ret}
       </MarkerClusterGroup>
     );
-  }, [
-    setPortfolioModalOpen,
-    setChosenFellow,
-    allImageSharp,
-    allMarkdownRemark,
-  ]);
+  }, [setPortfolioModalOpen, setChosenFellow, allImageSharp, allMdx]);
 
   const mapSettings = {
     center: CENTER,
@@ -190,7 +185,7 @@ export default IndexPage;
 
 export const profiles = graphql`
   query FellowData {
-    allMarkdownRemark {
+    allMdx {
       nodes {
         frontmatter {
           description
