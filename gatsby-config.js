@@ -34,5 +34,51 @@ module.exports = {
                 icon: `src/assets/images/favicon.ico`,
             },
         },
+        {
+            resolve: `gatsby-source-github-api`,
+            options: {
+                // token: required by the GitHub API
+                token: process.env.TOKEN,
+                // GraphQLquery: defaults to a search query
+                graphQLQuery: `
+                {
+                    organization(login: "MLH-Fellowship") {
+                      teams(first: 50) {
+                        edges {
+                          node {
+                            description
+                            name
+                            id
+                            members {
+                              nodes {
+                                avatarUrl
+                                bio
+                                email
+                                followers {
+                                  totalCount
+                                }
+                                following {
+                                  totalCount
+                                }
+                                location
+                                login
+                                name
+                                twitterUsername
+                                url
+                                websiteUrl
+                                company
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  
+                    `,
+                // variables: defaults to variables needed for a search query
+                variables: {}
+            }
+        }
     ],
 };

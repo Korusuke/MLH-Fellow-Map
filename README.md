@@ -20,7 +20,7 @@ profilepic: john.png
 github: john
 twitter: jdoe
 linkedin: johndoe
-description: I am John Doe, that's all you need to know.
+bio: I am John Doe, that's all you need to know.
 lat: '25.0000'
 long: '71.0000'
 ---

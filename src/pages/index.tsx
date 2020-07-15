@@ -11,6 +11,7 @@ import { Button } from 'reactstrap';
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
 import { Fellow, FellowType } from '../data/fellow-type';
+import { githubParser } from '../lib/github';
 
 const LOCATION = {
   lat: 0,
@@ -20,12 +21,15 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMarkdownRemark, allImageSharp },
+  data: { allMarkdownRemark, allImageSharp, allGithubData },
 }: {
   data: FellowDataQuery;
 }) => {
   const allProfiles = allMarkdownRemark.nodes;
-
+  console.log(allGithubData);
+  const githubProfiles = githubParser(
+    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
+  );
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
@@ -45,6 +49,7 @@ const IndexPage = ({
       const fellow = new Fellow(
         allProfiles[i].frontmatter as FellowType,
         allImageSharp,
+        githubProfiles,
       );
 
       const center = new L.LatLng(fellow.lat, fellow.long);
@@ -79,6 +84,7 @@ const IndexPage = ({
       <MarkerClusterGroup
         showCoverageOnHover={false}
         iconCreateFunction={createClusterCustomIcon}
+        maxClusterRadius={25}
       >
         {ret}
       </MarkerClusterGroup>
@@ -168,7 +174,7 @@ function MapPopup({
         <h4>{fellow.name}</h4>
       </div>
       <div>
-        <p>{fellow.description}</p>
+        <p>{fellow.bio}</p>
       </div>
       <div className="divider" />
       <div className="social-links">{socialLinks}</div>
@@ -193,7 +199,7 @@ export const profiles = graphql`
     allMarkdownRemark {
       nodes {
         frontmatter {
-          description
+          bio
           github
           lat
           linkedin
@@ -210,6 +216,42 @@ export const profiles = graphql`
         fluid(maxHeight: 100, maxWidth: 100) {
           src
           originalName
+        }
+      }
+    }
+    allGithubData {
+      nodes {
+        data {
+          organization {
+            teams {
+              edges {
+                node {
+                  members {
+                    nodes {
+                      avatarUrl
+                      bio
+                      company
+                      email
+                      followers {
+                        totalCount
+                      }
+                      following {
+                        totalCount
+                      }
+                      login
+                      name
+                      twitterUsername
+                      url
+                      websiteUrl
+                      location
+                    }
+                  }
+                  name
+                  description
+                }
+              }
+            }
+          }
         }
       }
     }
