@@ -1,6 +1,7 @@
 import React, { ReactElement, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import L from 'leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
@@ -27,6 +28,14 @@ const IndexPage = ({
 
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
+
+  const createClusterCustomIcon = (cluster: { getChildCount: () => void }) => {
+    return L.divIcon({
+      html: `<span>${cluster.getChildCount()}</span>`,
+      className: 'marker-cluster-custom',
+      iconSize: L.point(50, 50, true),
+    });
+  };
 
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
@@ -60,7 +69,14 @@ const IndexPage = ({
         </Marker>,
       );
     }
-    return ret;
+    return (
+      <MarkerClusterGroup
+        showCoverageOnHover={false}
+        iconCreateFunction={createClusterCustomIcon}
+      >
+        {ret}
+      </MarkerClusterGroup>
+    );
   }, [
     setPortfolioModalOpen,
     setChosenFellow,
