@@ -1,25 +1,33 @@
-const path = require(`path`);
-const { createFilePath } = require(`gatsby-source-filesystem`);
+const { createFilePath } = require('gatsby-source-filesystem');
+const path = require('path');
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
-  if (node.internal.type === `MarkdownRemark`) {
-    const slug = createFilePath({ node, getNode, basePath: `pages` });
+
+  // only operate on `Mdx` nodes.
+  if (node.internal.type === 'Mdx') {
+    const value = createFilePath({ node, getNode });
+
     createNodeField({
+      // name of the field added
+      name: 'slug',
+      // individual MDX node
       node,
-      name: `slug`,
-      value: slug,
+      // generated value for filepath
+      value: value,
     });
   }
 };
 
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions, reporter }) => {
+  // destructure the createPage function from the actions object
   const { createPage } = actions;
   const result = await graphql(`
     query {
-      allMarkdownRemark {
+      allMdx {
         edges {
           node {
+            id
             fields {
               slug
             }
@@ -28,16 +36,20 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
-
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+  if (result.errors) {
+    reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
+  }
+  // create profile pages
+  const profiles = result.data.allMdx.edges;
+  // call `createPage` for each result
+  profiles.forEach(({ node }, index) => {
     createPage({
+      // slug that is created before
       path: node.fields.slug,
-      component: path.resolve(`./src/templates/Portfolio.js`),
-      context: {
-        // Data passed to context is available
-        // in page queries as GraphQL variables.
-        slug: node.fields.slug,
-      },
+      // this component will wrap the MDX content
+      component: path.resolve(`./src/components/PortfolioPage.js`),
+      // values here are made available to graphql
+      context: { id: node.id },
     });
   });
 };
