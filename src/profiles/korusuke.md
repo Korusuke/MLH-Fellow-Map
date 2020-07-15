@@ -4,7 +4,7 @@ profilepic: korusuke.png
 github: korusuke
 twitter: kiteretsu_
 linkedin: kiteretsu
-description: I am currently a junior year student pursuing Computer Science. I am majorly interested in Robotics and love to scrape random stuff.
+bio: I am currently a junior year student pursuing Computer Science. I am majorly interested in Robotics and love to scrape random stuff.
 lat: '19.0760'
 long: '72.8777'
 ---
