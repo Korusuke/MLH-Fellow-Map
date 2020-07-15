@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import L from 'leaflet';
+import L, { marker } from 'leaflet';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
@@ -9,6 +9,7 @@ import ReactDOMServer from 'react-dom/server';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
+import { Marker, Popup } from 'react-leaflet';
 
 const LOCATION = {
   lat: 0,
@@ -44,10 +45,8 @@ const IndexPage = ({
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<FellowType | null>(null);
 
-  function mapEffect(baseMap: { leafletElement: L.Map } | null) {
-    if (!baseMap) return;
-    const { leafletElement } = baseMap;
-
+  const markers = useMemo(() => {
+    const ret: ReactElement[] = [];
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = allProfiles[i].frontmatter as FellowType;
       const center = new L.LatLng(
@@ -55,31 +54,37 @@ const IndexPage = ({
         parseFloat(fellow.long),
       );
 
-      L.marker(center, {
-        icon: L.icon({
-          className: 'icon',
-          iconUrl: `${allProfilePics[fellow.profilepic]}`,
-          iconSize: [50, 50],
-        }),
-      })
-        .addTo(leafletElement)
-        .bindPopup(
-          ReactDOMServer.renderToString(
+      ret.push(
+        <Marker
+          position={center}
+          key={fellow.name + fellow.lat}
+          icon={L.icon({
+            className: 'icon',
+            iconUrl: `${allProfilePics[fellow.profilepic]}`,
+            iconSize: [50, 50],
+          })}
+        >
+          <Popup>
             <MapPopup
               setPortfolioModalOpen={setPortfolioModalOpen}
               setChosenFellow={setChosenFellow}
               fellow={fellow}
-            />,
-          ),
-        );
+            />
+          </Popup>
+        </Marker>,
+      );
     }
-  }
-
+    return ret;
+  }, [
+    setPortfolioModalOpen,
+    setChosenFellow,
+    allImageSharp,
+    allMarkdownRemark,
+  ]);
   const mapSettings = {
     center: CENTER,
     defaultBaseMap: 'OpenStreetMap',
     zoom: DEFAULT_ZOOM,
-    mapEffect,
   };
 
   return (
@@ -91,7 +96,7 @@ const IndexPage = ({
           rel="stylesheet"
         />
       </Helmet>
-      <Map {...mapSettings} />
+      <Map {...mapSettings}>{markers}</Map>
       <PortfolioModal
         isOpen={isPortfolioModalOpen}
         setOpen={setPortfolioModalOpen}

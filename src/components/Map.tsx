@@ -7,23 +7,14 @@ const DEFAULT_MAP_SERVICE = 'OpenStreetMap';
 
 const Map: FunctionComponent<{
   defaultBaseMap: string;
-  mapEffect: (map: BaseMap | null) => void;
   className?: string;
 }> = ({
   children,
   className,
   defaultBaseMap = DEFAULT_MAP_SERVICE,
-  mapEffect,
   ...rest
 }) => {
-  const mapRef = createRef<BaseMap>();
-
   useConfigureLeaflet();
-
-  useRefEffect({
-    ref: mapRef,
-    effect: mapEffect,
-  });
 
   const services = useMapServices({
     names: [...new Set([defaultBaseMap, DEFAULT_MAP_SERVICE])],
@@ -53,9 +44,9 @@ const Map: FunctionComponent<{
 
   return (
     <div className={mapClassName}>
-      <BaseMap ref={mapRef} {...mapSettings}>
-        {children}
+      <BaseMap {...mapSettings}>
         {basemap && <TileLayer {...basemap} />}
+        {children}
         <ZoomControl position="bottomright" />
       </BaseMap>
     </div>
