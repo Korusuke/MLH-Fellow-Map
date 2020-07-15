@@ -1,7 +1,7 @@
-@import "settings/__settings";
-@import "util/__util";
-@import "components/__components";
-@import "pages/__pages";
+@import 'settings/__settings';
+@import 'util/__util';
+@import 'components/__components';
+@import 'pages/__pages';
 
 * {
   box-sizing: border-box;
@@ -24,13 +24,21 @@ main {
   align-items: center;
   overflow: hidden;
   border-radius: 100%;
-  
-  box-shadow: 0 3px 4px rgba(0,0,0,.4);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
   border: none;
-  transition: all .2s;
-
+  transition: all 0.2s;
   &:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,.6);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   }
 }
 
+.marker-cluster-custom {
+  background: #aae0f0;
+  border: 3px solid #aad3df;
+  border-radius: 50%;
+  color: #000;
+  height: 50px;
+  line-height: 46px;
+  text-align: center;
+  width: 50px;
+}
