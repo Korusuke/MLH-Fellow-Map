@@ -44,6 +44,8 @@ const IndexPage = ({
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = new Fellow(
         allProfiles[i].frontmatter as FellowType,
+        allProfiles[i].body,
+        //  allProfiles[i].fields.slug,
         allImageSharp,
       );
 
@@ -187,6 +189,7 @@ export const profiles = graphql`
   query FellowData {
     allMdx {
       nodes {
+        body
         frontmatter {
           description
           github

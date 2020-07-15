@@ -20,6 +20,8 @@ export class Fellow {
   name: string;
   private profilepic: string;
   twitter: string;
+  body: string;
+  // slug: string;
 
   profilePictureUrl?: string;
 
@@ -34,6 +36,8 @@ export class Fellow {
       long,
       twitter,
     }: FellowType,
+    body: string,
+    // slug: string,
     allImageSharp: FellowDataQuery['allImageSharp'],
   ) {
     this.description = description;
@@ -44,6 +48,8 @@ export class Fellow {
     this.name = name;
     this.profilepic = profilepic;
     this.twitter = twitter;
+    this.body = body;
+    // this.slug = slug;
 
     this.profilePictureUrl = allImageSharp.nodes.find((ele) => {
       if (!ele.fluid || !ele.fluid.originalName) return false;

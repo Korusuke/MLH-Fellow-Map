@@ -1,6 +1,8 @@
 import React, { createRef, useEffect } from 'react';
 import { Button, Container } from 'reactstrap';
 import { Fellow } from '../data/fellow-type';
+import { MDXProvider } from '@mdx-js/react';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 function PortfolioModal({
   isOpen,
@@ -43,6 +45,11 @@ function PortfolioModal({
           />
           <h3>{fellow.name}</h3>
           <p>{fellow.description}</p>
+          <p>
+            <MDXProvider>
+              <MDXRenderer>{fellow.body}</MDXRenderer>
+            </MDXProvider>
+          </p>
         </>
       )}
 
