@@ -47,7 +47,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       // slug that is created before
       path: node.fields.slug,
       // this component will wrap the MDX content
-      component: path.resolve(`./src/components/PortfolioPage.js`),
+      component: path.resolve(`./src/components/PortfolioPage.tsx`),
       // values here are made available to graphql
       context: { id: node.id },
     });
