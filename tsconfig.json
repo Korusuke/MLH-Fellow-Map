@@ -10,5 +10,5 @@
     "esModuleInterop": true,
     "noUnusedLocals": false
   },
-  "exclude": ["node_modules", "public", ".cache",".eslintrc.js"]
+  "exclude": ["node_modules", "public", ".cache",".eslintrc.js", "graphql-types.ts"]
 }

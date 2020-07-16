@@ -3,3 +3,4 @@ node_modules
 public
 .eslintrc.js
 gatsby-config.js
+graphql-types.ts
