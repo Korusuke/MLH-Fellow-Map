@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container } from 'reactstrap';
 import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
@@ -32,8 +31,6 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
           </div>
         </>
       )}
-
-      <Container />
     </div>
   );
 }

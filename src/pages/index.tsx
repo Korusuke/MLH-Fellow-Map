@@ -30,13 +30,8 @@ const IndexPage = ({
 }: {
   data: FellowDataQuery;
 }) => {
-  const githubProfiles = githubParser(
-    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
-  );
+  const githubProfiles = githubParser(allGithubData.nodes[0].data);
   const allProfiles = allMdx.nodes;
-
-  const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
-  const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
   const createClusterCustomIcon = (cluster: { getChildCount: () => void }) => {
     return L.divIcon({
@@ -46,7 +41,7 @@ const IndexPage = ({
     });
   };
 
-  const layers = {};
+  const layers: { [k in string]: boolean } = {};
   githubProfiles.forEach((ele) => {
     layers[ele.pod_id] = true;
   });
@@ -83,11 +78,7 @@ const IndexPage = ({
           })}
         >
           <Popup>
-            <MapPopup
-              setPortfolioModalOpen={setPortfolioModalOpen}
-              setChosenFellow={setChosenFellow}
-              fellow={fellow}
-            />
+            <MapPopup fellow={fellow} />
           </Popup>
         </Marker>,
       );
@@ -101,13 +92,7 @@ const IndexPage = ({
         {ret}
       </MarkerClusterGroup>
     );
-  }, [
-    setPortfolioModalOpen,
-    setChosenFellow,
-    showLayers,
-    allImageSharp,
-    allMdx,
-  ]);
+  }, [showLayers, allImageSharp, allMdx]);
 
   const mapSettings = {
     center: CENTER,
@@ -126,25 +111,11 @@ const IndexPage = ({
       </Helmet>
       <Map {...mapSettings}>{markers}</Map>
       <Filters layers={showLayers} setLayers={setShowLayers} />
-      {/* <Route
-        path={'/test'}
-        render={() => {
-          <PortfolioModal/>;
-        }}
-      /> */}
     </Layout>
   );
 };
 
-function MapPopup({
-  fellow,
-  setChosenFellow,
-  setPortfolioModalOpen,
-}: {
-  fellow: Fellow;
-  setChosenFellow: (val: Fellow) => void;
-  setPortfolioModalOpen: (val: boolean) => void;
-}) {
+function MapPopup({ fellow }: { fellow: Fellow }) {
   const SocialLink = ({ name }: { name: SocialType }) => {
     if (!fellow[name]) return null;
     return (

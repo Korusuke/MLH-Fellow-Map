@@ -1,10 +1,8 @@
 import React from 'react';
-import { Container } from 'reactstrap';
 import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
 import { Link } from 'gatsby';
-import NavigationHeader from './NavigationHeader';
 import PortfolioSocialLinks from './PortfolioSocialLinks';
 
 const shortcodes = { a: Link }; // Provide common components here
@@ -38,8 +36,6 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
           </div>
         </>
       )}
-
-      <Container />
     </div>
   );
 }

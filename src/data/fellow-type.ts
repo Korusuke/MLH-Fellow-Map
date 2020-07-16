@@ -1,12 +1,13 @@
 import { FellowDataQuery } from '../../graphql-types';
+import { GithubProfile } from '../lib/github';
 
 export type FellowType = {
   name: string;
   profilepic: string; // link or name of locally stored image
   bio: string;
-  lat: string;
-  long: string;
-} & { [k in SocialType]: string };
+  lat: string | number;
+  long: string | number;
+} & { [k in SocialType]?: string };
 
 export const SocialLinks = {
   github: 'https://github.com',
@@ -15,23 +16,26 @@ export const SocialLinks = {
 };
 export type SocialType = keyof typeof SocialLinks;
 
-export class Fellow {
+export class Fellow implements FellowType {
   bio: string;
   github: string;
   lat: number;
-  linkedin: string;
+  linkedin?: string;
   long: number;
   name: string;
-  private profilepic: string;
-  twitter: string;
-  website: string;
-  company: string;
+  profilepic: string;
+  twitter?: string;
+  website?: string;
+  company?: string;
+
   podName: string;
   podId: string;
+
   body: string;
+
   // slug: string;
 
-  profilePictureUrl: string;
+  profilePictureUrl?: string;
 
   constructor(
     { profilepic, name, lat, bio, github, linkedin, long, twitter }: FellowType,
@@ -39,23 +43,27 @@ export class Fellow {
     // slug: string,
     allImageSharp: FellowDataQuery['allImageSharp'],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    githubProfiles: any,
+    githubProfiles: GithubProfile[],
   ) {
     const githubProfile = githubProfiles.find((ele) => {
-      return ele.username.toLowerCase() === github.toLowerCase();
+      return ele.username.toLowerCase() === github?.toLowerCase();
     });
+
+    if (!githubProfile)
+      throw new Error("Can't find github profile for: " + name);
 
     this.name = name || githubProfile.name;
     this.profilepic = profilepic;
-    this.bio = bio || githubProfile.bio;
-    this.github = github;
+    this.bio = bio || githubProfile.bio || '';
+    this.github = github as string;
     this.twitter = twitter || githubProfile.twitter_username;
     this.linkedin = linkedin;
     this.lat = parseFloat(lat as string);
     this.long = parseFloat(long as string);
     this.website = githubProfile.website_url;
     this.company = githubProfile.company;
-    this.podName = githubProfile.pod;
+
+    this.podName = githubProfile.pod; // more like teamname, includes mentors and mlh staff
     this.podId = githubProfile.pod_id;
 
     this.body = body;
@@ -65,6 +73,6 @@ export class Fellow {
       allImageSharp.nodes.find((ele) => {
         if (!ele.fluid || !ele.fluid.originalName) return false;
         return ele.fluid.originalName === profilepic;
-      })?.fluid?.src || githubProfile.profilepic;
+      })?.fluid?.src || githubProfile?.profilepic;
   }
 }
