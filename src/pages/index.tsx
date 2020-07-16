@@ -9,7 +9,8 @@ import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
-import { Marker, Popup } from 'react-leaflet';
+import { Popup } from 'react-leaflet';
+import Marker from 'react-leaflet-enhanced-marker';
 import { githubParser } from '../lib/github';
 import {
   Fellow,
@@ -71,17 +72,21 @@ const IndexPage = ({
         <Marker
           position={center}
           key={fellow.name + fellow.lat}
-          icon={L.icon({
-            className: 'icon',
-            iconUrl:
-              fellow.profilePictureUrl ||
-              allImageSharp.nodes.find((ele) => {
-                if (!ele || !ele.fluid) return false;
-                return ele.fluid.originalName === 'mlh.png';
-              })?.fluid?.src ||
-              'none',
-            iconSize: [50, 50],
-          })}
+          icon={
+            <div className={`${fellow.podId}`}>
+              <img
+                src={
+                  fellow.profilePictureUrl ||
+                  allImageSharp.nodes.find((ele) => {
+                    if (!ele || !ele.fluid) return false;
+                    return ele.fluid.originalName === 'mlh.png';
+                  })?.fluid?.src ||
+                  'none'
+                }
+                className={`icon`}
+              />
+            </div>
+          }
         >
           <Popup>
             <MapPopup

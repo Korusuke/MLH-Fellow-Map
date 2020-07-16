@@ -13462,6 +13462,13 @@ react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-leaflet-enhanced-marker@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/react-leaflet-enhanced-marker/-/react-leaflet-enhanced-marker-1.0.15.tgz#90d5de4698359173bcb5d793116946c1cdc687ce"
+  integrity sha512-Qep6e2IsAK+uqqNvjj1/vP5rxTfuFd5Qdy+575QprK9cv8MqBkDjUjf/5FY/ZrMOWqT/d/5aGuECPQ2XZWxDEQ==
+  dependencies:
+    fbjs "^1.0.0"
+
 react-leaflet-markercluster@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-leaflet-markercluster/-/react-leaflet-markercluster-2.0.0.tgz#e0138b89a1b9c5cf752c9a8ec80231588ab46b38"
