@@ -17,8 +17,6 @@ import {
   SocialLinks,
   SocialType,
 } from '../data/fellow-type';
-import { graphql } from 'gatsby';
-import { Button } from 'reactstrap';
 import { graphql, Link } from 'gatsby';
 
 const LOCATION = {
