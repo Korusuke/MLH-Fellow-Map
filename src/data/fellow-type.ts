@@ -1,15 +1,19 @@
 import { FellowDataQuery } from '../../graphql-types';
 
-export interface FellowType {
+export type FellowType = {
   name: string;
   profilepic: string; // link or name of locally stored image
   description: string;
-  github: string;
-  linkedin: string;
-  twitter: string;
   lat: string;
   long: string;
-}
+} & { [k in SocialType]: string };
+
+export const SocialLinks = {
+  github: 'https://github.com',
+  linkedin: 'https://www.linkedin.com/in',
+  twitter: 'https://twitter.com',
+};
+export type SocialType = keyof typeof SocialLinks;
 
 export class Fellow {
   description: string;
