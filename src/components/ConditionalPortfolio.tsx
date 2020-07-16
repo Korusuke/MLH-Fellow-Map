@@ -17,9 +17,7 @@ export default function ConditionalPortfolio({
     return <p>{"Can't find MDX Data!"}</p>;
   }
 
-  const githubProfiles = githubParser(
-    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
-  );
+  const githubProfiles = githubParser(allGithubData.nodes[0].data);
 
   const fellow = new Fellow(
     mdx.frontmatter as FellowType,
