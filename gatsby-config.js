@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
     plugins: [
         'gatsby-plugin-graphql-codegen', // for typescript GraphQL Typing
@@ -38,7 +40,7 @@ module.exports = {
             resolve: `gatsby-source-github-api`,
             options: {
                 // token: required by the GitHub API
-                token: process.env.TOKEN,
+                token: process.env.GITHUB_TOKEN,
                 // GraphQLquery: defaults to a search query
                 graphQLQuery: `
                 {

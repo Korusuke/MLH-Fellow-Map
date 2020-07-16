@@ -72,3 +72,6 @@ yarn-error.log
 .idea/
 # Gatsby Generated Types
 /graphql-types.ts
+
+# Environment Variables
+.env
