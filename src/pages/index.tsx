@@ -178,6 +178,7 @@ function MapPopup({
         to={`/test`}
         state={{
           modal: true,
+          noScroll: true,
         }}
       >
         <Button className="mt-4" color={'success'}>
