@@ -43,7 +43,9 @@ function PortfolioModal({
             alt={`Profile of ${fellow.name}`}
           />
           <h3>{fellow.name}</h3>
-          <p>{fellow.description}</p>
+          <p>{fellow.bio}</p>
+          <p>{fellow.podId}</p>
+          <p>{fellow.podName}</p>
           <p>
             <MDXRenderer>{fellow.body}</MDXRenderer>
           </p>

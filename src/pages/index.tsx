@@ -5,15 +5,19 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
 import PortfolioModal from '../components/PortfolioModal';
+import Filters from '../components/Filter';
+import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
+import { githubParser } from '../lib/github';
 import {
   Fellow,
   FellowType,
   SocialLinks,
   SocialType,
 } from '../data/fellow-type';
+import { graphql } from 'gatsby';
 import { Button } from 'reactstrap';
 import { graphql, Link } from 'gatsby';
 
@@ -25,10 +29,13 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMdx, allImageSharp },
+  data: { allMdx, allImageSharp, allGithubData },
 }: {
   data: FellowDataQuery;
 }) => {
+  const githubProfiles = githubParser(
+    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
+  );
   const allProfiles = allMdx.nodes;
 
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
@@ -42,6 +49,11 @@ const IndexPage = ({
     });
   };
 
+  const layers = {};
+  githubProfiles.forEach((ele) => {
+    layers[ele.pod_id] = true;
+  });
+  const [showLayers, setShowLayers] = useState(layers);
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
@@ -52,10 +64,11 @@ const IndexPage = ({
         allProfiles[i].body,
         //  allProfiles[i].fields.slug,
         allImageSharp,
+        githubProfiles,
       );
 
+      if (!showLayers[fellow.podId]) continue;
       const center = new L.LatLng(fellow.lat, fellow.long);
-
       ret.push(
         <Marker
           position={center}
@@ -86,11 +99,18 @@ const IndexPage = ({
       <MarkerClusterGroup
         showCoverageOnHover={false}
         iconCreateFunction={createClusterCustomIcon}
+        maxClusterRadius={25}
       >
         {ret}
       </MarkerClusterGroup>
     );
-  }, [setPortfolioModalOpen, setChosenFellow, allImageSharp, allMdx]);
+  }, [
+    setPortfolioModalOpen,
+    setChosenFellow,
+    showLayers,
+    allImageSharp,
+    allMdx,
+  ]);
 
   const mapSettings = {
     center: CENTER,
@@ -108,6 +128,7 @@ const IndexPage = ({
         />
       </Helmet>
       <Map {...mapSettings}>{markers}</Map>
+      <Filters layers={showLayers} setLayers={setShowLayers} />
       {/* <Route
         path={'/test'}
         render={() => {
@@ -150,7 +171,7 @@ function MapPopup({
         <h4>{fellow.name}</h4>
       </div>
       <div>
-        <p>{fellow.description}</p>
+        <p>{fellow.bio}</p>
       </div>
       <div className="divider" />
       <div className="social-links">{socialLinks}</div>
@@ -177,7 +198,7 @@ export const profiles = graphql`
       nodes {
         body
         frontmatter {
-          description
+          bio
           github
           lat
           linkedin
@@ -194,6 +215,42 @@ export const profiles = graphql`
         fluid(maxHeight: 100, maxWidth: 100) {
           src
           originalName
+        }
+      }
+    }
+    allGithubData {
+      nodes {
+        data {
+          organization {
+            teams {
+              edges {
+                node {
+                  members {
+                    nodes {
+                      avatarUrl
+                      bio
+                      company
+                      email
+                      followers {
+                        totalCount
+                      }
+                      following {
+                        totalCount
+                      }
+                      login
+                      name
+                      twitterUsername
+                      url
+                      websiteUrl
+                      location
+                    }
+                  }
+                  name
+                  description
+                }
+              }
+            }
+          }
         }
       }
     }

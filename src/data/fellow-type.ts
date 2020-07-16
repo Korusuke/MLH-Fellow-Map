@@ -3,7 +3,7 @@ import { FellowDataQuery } from '../../graphql-types';
 export type FellowType = {
   name: string;
   profilepic: string; // link or name of locally stored image
-  description: string;
+  bio: string;
   lat: string;
   long: string;
 } & { [k in SocialType]: string };
@@ -16,7 +16,7 @@ export const SocialLinks = {
 export type SocialType = keyof typeof SocialLinks;
 
 export class Fellow {
-  description: string;
+  bio: string;
   github: string;
   lat: number;
   linkedin: string;
@@ -24,40 +24,47 @@ export class Fellow {
   name: string;
   private profilepic: string;
   twitter: string;
+  website: string;
+  company: string;
+  podName: string;
+  podId: string;
   body: string;
   // slug: string;
 
-  profilePictureUrl?: string;
+  profilePictureUrl: string;
 
   constructor(
-    {
-      profilepic,
-      name,
-      lat,
-      description,
-      github,
-      linkedin,
-      long,
-      twitter,
-    }: FellowType,
+    { profilepic, name, lat, bio, github, linkedin, long, twitter }: FellowType,
     body: string,
     // slug: string,
     allImageSharp: FellowDataQuery['allImageSharp'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    githubProfiles: [any],
   ) {
-    this.description = description;
-    this.github = github;
-    this.lat = parseFloat(lat as string);
-    this.linkedin = linkedin;
-    this.long = parseFloat(long as string);
-    this.name = name;
+    const githubProfile = githubProfiles.find((ele) => {
+      return ele.username.toLowerCase() === github.toLowerCase();
+    });
+
+    this.name = name || githubProfile.name;
     this.profilepic = profilepic;
-    this.twitter = twitter;
+    this.bio = bio || githubProfile.bio;
+    this.github = github;
+    this.twitter = twitter || githubProfile.twitter_username;
+    this.linkedin = linkedin;
+    this.lat = parseFloat(lat as string);
+    this.long = parseFloat(long as string);
+    this.website = githubProfile.website_url;
+    this.company = githubProfile.company;
+    this.podName = githubProfile.pod;
+    this.podId = githubProfile.pod_id;
+
     this.body = body;
     // this.slug = slug;
 
-    this.profilePictureUrl = allImageSharp.nodes.find((ele) => {
-      if (!ele.fluid || !ele.fluid.originalName) return false;
-      return ele.fluid.originalName === profilepic;
-    })?.fluid?.src;
+    this.profilePictureUrl =
+      allImageSharp.nodes.find((ele) => {
+        if (!ele.fluid || !ele.fluid.originalName) return false;
+        return ele.fluid.originalName === profilepic;
+      })?.fluid?.src || githubProfile.profilepic;
   }
 }

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
   plugins: [
     'gatsby-plugin-graphql-codegen', // for typescript GraphQL Typing
@@ -34,6 +36,7 @@ module.exports = {
       }
     },
     `gatsby-transformer-remark`,
+    `gatsby-plugin-mdx`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -45,6 +48,52 @@ module.exports = {
         display: `standalone`,
         icon: `src/assets/images/favicon.ico`
       }
+    },
+    {
+      resolve: `gatsby-source-github-api`,
+      options: {
+        // token: required by the GitHub API
+        token: process.env.GITHUB_TOKEN,
+        // GraphQLquery: defaults to a search query
+        graphQLQuery: `
+                {
+                    organization(login: "MLH-Fellowship") {
+                      teams(first: 50) {
+                        edges {
+                          node {
+                            description
+                            name
+                            id
+                            members {
+                              nodes {
+                                avatarUrl
+                                bio
+                                email
+                                followers {
+                                  totalCount
+                                }
+                                following {
+                                  totalCount
+                                }
+                                location
+                                login
+                                name
+                                twitterUsername
+                                url
+                                websiteUrl
+                                company
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  
+                    `,
+        // variables: defaults to variables needed for a search query
+        variables: {},
+      },
     },
     `gatsby-plugin-mdx`
   ]
