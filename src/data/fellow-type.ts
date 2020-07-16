@@ -57,6 +57,8 @@ export class Fellow {
     this.company = githubProfile.company;
     this.podName = githubProfile.pod;
     this.podId = githubProfile.pod_id;
+
+    this.body = body;
     // this.slug = slug;
 
     this.profilePictureUrl =
