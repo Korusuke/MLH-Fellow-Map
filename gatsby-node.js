@@ -28,8 +28,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         edges {
           node {
             id
-            fields {
-              slug
+            frontmatter {
+              github
             }
           }
         }
@@ -45,7 +45,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   profiles.forEach(({ node }) => {
     createPage({
       // slug that is created before
-      path: node.fields.slug,
+      path: node.frontmatter.github,
       // this component will wrap the MDX content
       component: path.resolve(`./src/components/PortfolioPage.tsx`),
       // values here are made available to graphql
