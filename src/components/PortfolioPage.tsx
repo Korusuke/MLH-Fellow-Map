@@ -23,7 +23,9 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
           <div className="subheading">{fellow.bio}</div>
 
           <PortfolioSocialLinks fellow={fellow} />
-
+          <div className="u-margin-top">
+            <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+          </div>
           <div className="body">
             <MDXProvider components={shortcodes}>
               <MDXRenderer>{fellow.body}</MDXRenderer>

@@ -17,9 +17,9 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
             src={fellow.profilePictureUrl}
             alt={`Profile of ${fellow.name}`}
           />
+          <PortfolioSocialLinks fellow={fellow} />
           <div className="heading">{fellow.name}</div>
           <div className="subheading">{fellow.bio}</div>
-          {/* <PortfolioSocialLinks fellow={fellow} /> */}
           <div className="pod u-margin-top">
             &laquo;
             <span className="modal-pod">
@@ -28,7 +28,9 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
             </span>{' '}
             &raquo;
           </div>
-
+          <div className="u-margin-top">
+            <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+          </div>
           <div className="body">
             <MDXProvider components={shortcodes}>
               <MDXRenderer>{fellow.body}</MDXRenderer>
