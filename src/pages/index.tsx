@@ -15,7 +15,7 @@ import {
   SocialType,
 } from '../data/fellow-type';
 import { Button } from 'reactstrap';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 
 const LOCATION = {
   lat: 0,
@@ -108,11 +108,12 @@ const IndexPage = ({
         />
       </Helmet>
       <Map {...mapSettings}>{markers}</Map>
-      <PortfolioModal
-        isOpen={isPortfolioModalOpen}
-        setOpen={setPortfolioModalOpen}
-        fellow={chosenFellow || undefined}
-      />
+      {/* <Route
+        path={'/test'}
+        render={() => {
+          <PortfolioModal/>;
+        }}
+      /> */}
     </Layout>
   );
 };
@@ -153,16 +154,16 @@ function MapPopup({
       </div>
       <div className="divider" />
       <div className="social-links">{socialLinks}</div>
-      <Button
-        className="mt-4"
-        color={'success'}
-        onClick={() => {
-          setChosenFellow(fellow);
-          setPortfolioModalOpen(true);
+      <Link
+        to={`/${fellow.github}`}
+        state={{
+          modal: true,
         }}
       >
-        More Details
-      </Button>
+        <Button className="mt-4" color={'success'}>
+          More Details
+        </Button>
+      </Link>
     </div>
   );
 }

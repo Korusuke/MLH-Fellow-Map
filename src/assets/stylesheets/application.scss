@@ -13,6 +13,36 @@
   grid-template-rows: auto 1fr auto;
 }
 
+.ReactModal__Overlay{
+  position: relative !important;
+  transform: translateY(-100vh);
+  height: 100vh;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  top: 30vh !important;
+  transition: all 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+  top: 0px !important;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+  top: 300px !important;
+}
+
+.test-modal{
+  width: 100%;
+  min-height: 70vh;
+  position: absolute;
+  top:30vh;
+  background-color: #F2F2F2;
+}
+
 main {
   padding: 2em 0;
 }
