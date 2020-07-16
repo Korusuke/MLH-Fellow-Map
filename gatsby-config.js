@@ -24,6 +24,7 @@ module.exports = {
             },
         },
         `gatsby-transformer-remark`,
+        `gatsby-plugin-mdx`,
         {
             resolve: `gatsby-plugin-manifest`,
             options: {
@@ -83,4 +84,5 @@ module.exports = {
             }
         }
     ],
+   
 };

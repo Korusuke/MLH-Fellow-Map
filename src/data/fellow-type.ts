@@ -1,15 +1,19 @@
 import { FellowDataQuery } from '../../graphql-types';
 
-export interface FellowType {
+export type FellowType = {
   name: string;
   profilepic: string; // link or name of locally stored image
   bio: string;
-  github: string;
-  linkedin: string;
-  twitter: string;
   lat: string;
   long: string;
-}
+} & { [k in SocialType]: string };
+
+export const SocialLinks = {
+  github: 'https://github.com',
+  linkedin: 'https://www.linkedin.com/in',
+  twitter: 'https://twitter.com',
+};
+export type SocialType = keyof typeof SocialLinks;
 
 export class Fellow {
   bio: string;
@@ -24,11 +28,15 @@ export class Fellow {
   company: string;
   podName: string;
   podId: string;
+  body: string;
+  // slug: string;
 
   profilePictureUrl: string;
 
   constructor(
     { profilepic, name, lat, bio, github, linkedin, long, twitter }: FellowType,
+    body: string,
+    // slug: string,
     allImageSharp: FellowDataQuery['allImageSharp'],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     githubProfiles: [any],
@@ -49,6 +57,7 @@ export class Fellow {
     this.company = githubProfile.company;
     this.podName = githubProfile.pod;
     this.podId = githubProfile.pod_id;
+    // this.slug = slug;
 
     this.profilePictureUrl =
       allImageSharp.nodes.find((ele) => {

@@ -4,15 +4,20 @@ import L from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
-import { graphql } from 'gatsby';
 import PortfolioModal from '../components/PortfolioModal';
 import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
-import { Fellow, FellowType } from '../data/fellow-type';
 import { githubParser } from '../lib/github';
+import {
+  Fellow,
+  FellowType,
+  SocialLinks,
+  SocialType,
+} from '../data/fellow-type';
+import { graphql } from 'gatsby';
 
 const LOCATION = {
   lat: 0,
@@ -22,14 +27,15 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMarkdownRemark, allImageSharp, allGithubData },
+  data: { allMdx, allImageSharp, allGithubData },
 }: {
   data: FellowDataQuery;
 }) => {
-  const allProfiles = allMarkdownRemark.nodes;
   const githubProfiles = githubParser(
     allGithubData.nodes[0]?.data?.organization?.teams?.edges,
   );
+  const allProfiles = allMdx.nodes;
+
   const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
@@ -53,6 +59,8 @@ const IndexPage = ({
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = new Fellow(
         allProfiles[i].frontmatter as FellowType,
+        allProfiles[i].body,
+        //  allProfiles[i].fields.slug,
         allImageSharp,
         githubProfiles,
       );
@@ -99,7 +107,7 @@ const IndexPage = ({
     setChosenFellow,
     showLayers,
     allImageSharp,
-    allMarkdownRemark,
+    allMdx,
   ]);
 
   const mapSettings = {
@@ -137,43 +145,22 @@ function MapPopup({
   setChosenFellow: (val: Fellow) => void;
   setPortfolioModalOpen: (val: boolean) => void;
 }) {
-  const socialLinks = [];
-  if (fellow.github) {
-    socialLinks.push(
+  const SocialLink = ({ name }: { name: SocialType }) => {
+    if (!fellow[name]) return null;
+    return (
       <a
-        href={`https://github.com/${fellow.github}`}
+        href={`${SocialLinks[name]}/${fellow[name]}`}
         target="_blank"
         rel="noreferrer"
-        key={0}
       >
-        <i className="fab fa-github" />
-      </a>,
+        <i className={`fab fa-${name}`} />
+      </a>
     );
-  }
-  if (fellow.linkedin) {
-    socialLinks.push(
-      <a
-        href={`https://www.linkedin.com/in/${fellow.linkedin}`}
-        target="_blank"
-        rel="noreferrer"
-        key={1}
-      >
-        <i className="fab fa-linkedin" />
-      </a>,
-    );
-  }
-  if (fellow.twitter) {
-    socialLinks.push(
-      <a
-        href={`https://twitter.com/${fellow.twitter}`}
-        target="_blank"
-        rel="noreferrer"
-        key={2}
-      >
-        <i className="fab fa-twitter" />
-      </a>,
-    );
-  }
+  };
+
+  const socialLinks = Object.keys(SocialLinks).map((socialName, i) => (
+    <SocialLink name={socialName as SocialType} key={i} />
+  ));
 
   return (
     <div className="profile text-center">
@@ -203,9 +190,9 @@ export default IndexPage;
 
 export const profiles = graphql`
   query FellowData {
-    allMarkdownRemark {
+    allMdx {
       nodes {
-        id
+        body
         frontmatter {
           bio
           github
