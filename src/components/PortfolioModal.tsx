@@ -4,6 +4,7 @@ import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
 import { Link } from 'gatsby';
+import NavigationHeader from './NavigationHeader';
 import PortfolioSocialLinks from './PortfolioSocialLinks';
 
 const shortcodes = { a: Link }; // Provide common components here
@@ -20,8 +21,15 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
           />
           <div className="heading">{fellow.name}</div>
           <div className="subheading">{fellow.bio}</div>
-
-          <PortfolioSocialLinks fellow={fellow} />
+          {/* <PortfolioSocialLinks fellow={fellow} /> */}
+          <div className="pod u-margin-top">
+            &laquo;
+            <span className="modal-pod">
+              {' '}
+              {fellow.podId + ' : ' + fellow.podName}{' '}
+            </span>{' '}
+            &raquo;
+          </div>
 
           <div className="body">
             <MDXProvider components={shortcodes}>

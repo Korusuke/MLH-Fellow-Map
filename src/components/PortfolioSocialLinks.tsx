@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Fellow,
-  FellowType,
-  SocialLinks,
-  SocialType,
-} from '../data/fellow-type';
+import { Fellow, SocialLinks, SocialType } from '../data/fellow-type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGithub,
