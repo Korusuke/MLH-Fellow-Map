@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
+import React from 'react';
+import Select from 'react-select';
+import _ from 'lodash';
 
 const Filters = ({
   layers,
@@ -8,33 +9,30 @@ const Filters = ({
   layers: { [k in string]: boolean };
   setLayers: (val: { [k in string]: boolean }) => void;
 }) => {
-  const filterOptions: ReactElement[] = [];
-  Object.keys(layers).map(function (key, index) {
-    filterOptions.push(
-      <FormGroup key={index} check>
-        <Label check>
-          <Input
-            type="checkbox"
-            checked={layers[key]}
-            name={key}
-            onChange={handleLayer}
-          />{' '}
-          {key}
-        </Label>
-      </FormGroup>,
-    );
-  });
+  const selectOptions = _.map(layers, (layer, key) => ({
+    value: key,
+    label: key,
+  }));
 
-  function handleLayer(event: { target: { name: string; checked: boolean } }) {
-    const keyx = event.target.name;
-    const newLayers = { ...layers };
-    newLayers[keyx] = event.target.checked;
+  function handleLayer(event: any) {
+    const selectedLayers = _.map(event, layer => layer.label);
+    const newLayers: { [x: string]: boolean } = {};
+    _.forEach(selectOptions, option => {
+      newLayers[option.label] = event
+        ? _.includes(selectedLayers, option.label)
+        : true;
+    });
     setLayers(newLayers);
   }
 
   return (
-    <div id="filters">
-      <Form>{filterOptions}</Form>
+    <div className="filter">
+      <Select
+        onChange={handleLayer}
+        options={selectOptions}
+        isMulti
+        closeMenuOnSelect={false}
+      ></Select>
     </div>
   );
 };
