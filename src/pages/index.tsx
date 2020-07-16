@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import Map from '../components/Map';
 import { graphql } from 'gatsby';
 import PortfolioModal from '../components/PortfolioModal';
+import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
@@ -26,7 +27,6 @@ const IndexPage = ({
   data: FellowDataQuery;
 }) => {
   const allProfiles = allMarkdownRemark.nodes;
-  console.log(allGithubData);
   const githubProfiles = githubParser(
     allGithubData.nodes[0]?.data?.organization?.teams?.edges,
   );
@@ -41,6 +41,11 @@ const IndexPage = ({
     });
   };
 
+  const layers = {};
+  githubProfiles.forEach((ele) => {
+    layers[ele.pod_id] = true;
+  });
+  const [showLayers, setShowLayers] = useState(layers);
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
@@ -52,8 +57,8 @@ const IndexPage = ({
         githubProfiles,
       );
 
+      if (!showLayers[fellow.podId]) continue;
       const center = new L.LatLng(fellow.lat, fellow.long);
-
       ret.push(
         <Marker
           position={center}
@@ -92,6 +97,7 @@ const IndexPage = ({
   }, [
     setPortfolioModalOpen,
     setChosenFellow,
+    showLayers,
     allImageSharp,
     allMarkdownRemark,
   ]);
@@ -116,7 +122,9 @@ const IndexPage = ({
         isOpen={isPortfolioModalOpen}
         setOpen={setPortfolioModalOpen}
         fellow={chosenFellow || undefined}
+        id={id}
       />
+      <Filters layers={showLayers} setLayers={setShowLayers} />
     </Layout>
   );
 };
@@ -198,6 +206,7 @@ export const profiles = graphql`
   query FellowData {
     allMarkdownRemark {
       nodes {
+        id
         frontmatter {
           bio
           github
