@@ -122,7 +122,6 @@ const IndexPage = ({
         isOpen={isPortfolioModalOpen}
         setOpen={setPortfolioModalOpen}
         fellow={chosenFellow || undefined}
-        id={id}
       />
       <Filters layers={showLayers} setLayers={setShowLayers} />
     </Layout>

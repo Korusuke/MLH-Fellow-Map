@@ -6,12 +6,10 @@ function PortfolioModal({
   isOpen,
   setOpen,
   fellow,
-  id,
 }: {
   isOpen: boolean;
   setOpen: (val: boolean) => void;
   fellow?: Fellow;
-  id: any;
 }) {
   const modalRef = createRef<HTMLDivElement>();
 
