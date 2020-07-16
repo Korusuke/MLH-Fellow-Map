@@ -1,14 +1,9 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import { MDXProvider } from '@mdx-js/react';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { Link } from 'gatsby';
 import { PortfolioPageQuery } from '../../graphql-types';
 import { Fellow, FellowType } from '../data/fellow-type';
 import { githubParser } from '../lib/github';
 import PortfolioModal from './PortfolioModal';
-
-const shortcodes = { Link }; // Provide common components here
 
 export default function PortfolioPage({
   data: { mdx, allGithubData, allImageSharp },
@@ -18,9 +13,7 @@ export default function PortfolioPage({
   if (!mdx?.frontmatter) {
     return <p>{"Can't find MDX Data!"}</p>;
   }
-  const githubProfiles = githubParser(
-    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
-  );
+  const githubProfiles = githubParser(allGithubData.nodes[0].data);
   const fellow = new Fellow(
     mdx.frontmatter as FellowType,
     mdx.body,
