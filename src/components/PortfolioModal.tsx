@@ -1,40 +1,13 @@
-import React, { createRef, useEffect } from 'react';
+import React from 'react';
 import { Button, Container } from 'reactstrap';
 import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-
-function PortfolioModal({
-  isOpen,
-  setOpen,
-  fellow,
-}: {
-  isOpen: boolean;
-  setOpen: (val: boolean) => void;
-  fellow?: Fellow;
-}) {
-  const modalRef = createRef<HTMLDivElement>();
-
-  useEffect(() => {
-    if (!modalRef.current) return;
-    const style = modalRef.current.style;
-    if (isOpen) {
-      style.minHeight = '70vh';
-      style.height = 'min-content';
-      style.overflowY = 'visible';
-      style.top = '30vh';
-    } else {
-      style.top = (null as unknown) as string;
-
-      setTimeout(() => {
-        style.minHeight = (null as unknown) as string;
-        style.overflowY = (null as unknown) as string;
-        style.height = (null as unknown) as string;
-      }, 300); // length of animation, may have to be changed in scss too if changed
-    }
-  }, [isOpen, modalRef.current]);
-
+import { MDXProvider } from '@mdx-js/react';
+import { Link } from 'gatsby';
+const shortcodes = { a: Link }; // Provide common components here
+function PortfolioModal({ fellow }: { fellow: Fellow }) {
   return (
-    <div className="portfolio-modal" ref={modalRef}>
+    <div className="portfolio-modal">
       {fellow && (
         <>
           <img
@@ -47,14 +20,14 @@ function PortfolioModal({
           <p>{fellow.podId}</p>
           <p>{fellow.podName}</p>
           <p>
-            <MDXRenderer>{fellow.body}</MDXRenderer>
+            <MDXProvider components={shortcodes}>
+              <MDXRenderer>{fellow.body}</MDXRenderer>
+            </MDXProvider>
           </p>
         </>
       )}
 
-      <Button color="danger" onClick={() => setOpen(false)}>
-        Close
-      </Button>
+      <Button color="danger">Close</Button>
 
       <Container />
     </div>

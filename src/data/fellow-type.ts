@@ -39,7 +39,7 @@ export class Fellow {
     // slug: string,
     allImageSharp: FellowDataQuery['allImageSharp'],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    githubProfiles: [any],
+    githubProfiles: any,
   ) {
     const githubProfile = githubProfiles.find((ele) => {
       return ele.username.toLowerCase() === github.toLowerCase();

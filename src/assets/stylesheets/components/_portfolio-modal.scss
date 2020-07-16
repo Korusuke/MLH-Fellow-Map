@@ -1,14 +1,11 @@
 $profile-pic-size: 200px;
 .portfolio-modal {
-  z-index: 100;
   background-color: white;
   position: relative;
-  overflow-y: auto;
-  height: 0;
-  top: calc(#{$profile-pic-size} + 100vh);
 
   width: 100%;
   display: flex;
+  min-height: 70vh;
   flex-direction: column;
   align-items: center;
   transition: all 0.3s ease-in-out;
