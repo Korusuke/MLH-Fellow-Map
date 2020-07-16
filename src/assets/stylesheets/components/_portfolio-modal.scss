@@ -17,11 +17,11 @@ $profile-pic-size: 200px;
 
   .profile-image {
     border-radius: 50%;
-    width: $profile-pic-size;
-    height: $profile-pic-size;
+    width: 180px;
+    height: 180px;
     margin-top: calc(-#{$profile-pic-size} / 2);
     border: 5px white solid;
-    box-shadow: 3px 5px 10px;
+    box-shadow: 0px 15.619px 31.2381px rgba(0, 0, 0, 0.15);
     margin-bottom: 50px;
   }
 }

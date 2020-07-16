@@ -4,7 +4,6 @@ import L from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
-import PortfolioModal from '../components/PortfolioModal';
 import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear

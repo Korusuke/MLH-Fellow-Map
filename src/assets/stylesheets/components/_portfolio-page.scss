@@ -1,0 +1,86 @@
+$profile-pic-size: 200px;
+.portfolio-page {
+  background-color: white;
+  position: relative;
+
+  width: 100%;
+  display: flex;
+  min-height: 70vh;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+
+ /*   top: 30vh;
+  min-height: 70vh;
+  overflow-y: visible;*/
+
+
+  .profile-image {
+    border-radius: 50%;
+    width: 164px;
+    height: 164px;
+    border: 2px white solid;
+    box-shadow: 0px 15.619px 31.2381px rgba(0, 0, 0, 0.15);
+    margin-bottom: 35px;
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 35px auto 110px;
+  }
+
+  .heading {
+    font-size: 38px;
+    font-family: sans-serif;
+    color: black;
+    margin-bottom: 15px;
+    font-weight: 600;  
+  }
+
+  .subheading {
+    margin: 0 auto;
+    max-width: 450px;
+    color: #73737D;
+    font-size: 18px;
+    font-family: sans-serif;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .pod {
+    border: 2px black solid;
+    padding: 5px 20px 5px 20px;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .pod-id {
+    font-weight: 600;
+  }
+
+  .pod-name {
+    color:#73737D;
+  }
+
+  .portfolio-social-links{
+    display: flex;
+    align-items: center;
+    margin-top: 35px;
+  }
+
+  i{
+    font-size: 1.4rem;
+  }
+
+  a{
+    text-decoration: none;
+    color: inherit !important;
+  }
+}

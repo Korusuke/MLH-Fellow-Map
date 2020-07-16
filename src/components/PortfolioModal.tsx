@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container } from 'reactstrap';
+import { Container } from 'reactstrap';
 import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
@@ -26,8 +26,6 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
           </p>
         </>
       )}
-
-      <Button color="danger">Close</Button>
 
       <Container />
     </div>
