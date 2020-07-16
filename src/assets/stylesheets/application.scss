@@ -14,19 +14,22 @@
 }
 
 .ReactModal__Overlay{
-  position: relative !important;
-  transform: translateY(-100vh);
+  // position: absolute !important;
+  // transform: translateY(-100vh);
   height: 100vh;
+  // overflow: hidden;
 }
 
 .ReactModal__Overlay {
   opacity: 0;
-  top: 30vh !important;
+  top: 300px !important;
+  bottom: auto !important;
   transition: all 500ms ease-in-out;
 }
 
 .ReactModal__Overlay--after-open {
   opacity: 1;
+  position: absolute !important;
   top: 0px !important;
 }
 

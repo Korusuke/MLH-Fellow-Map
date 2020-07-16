@@ -158,6 +158,7 @@ function MapPopup({
         to={`/${fellow.github}`}
         state={{
           modal: true,
+          noScroll: true,
         }}
       >
         <Button className="mt-4" color={'success'}>
