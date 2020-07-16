@@ -1,6 +1,6 @@
 $profile-pic-size: 200px;
 .portfolio-modal {
-  background-color: white;
+  background-color: #fafafa;
   position: relative;
 
   width: 100%;
@@ -15,7 +15,7 @@ $profile-pic-size: 200px;
   overflow-y: visible;*/
 
 
-  .profile-image {
+  .modal-profile-image {
     border-radius: 50%;
     width: 180px;
     height: 180px;

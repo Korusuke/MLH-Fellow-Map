@@ -5,12 +5,14 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
 import { Link } from 'gatsby';
 import PortfolioSocialLinks from './PortfolioSocialLinks';
+import NavigationHeader from './NavigationHeader';
 
 const shortcodes = { a: Link }; // Provide common components here
 
 function PortfolioPage({ fellow }: { fellow: Fellow }) {
   return (
     <div className="portfolio-page">
+      <NavigationHeader fellow={fellow} />
       {fellow && (
         <>
           <img
@@ -20,16 +22,14 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
           />
           <div className="heading">{fellow.name}</div>
           <div className="subheading">{fellow.bio}</div>
-          <div className="pod">
-            <div className="pod-id"> {fellow.podId} </div>
-            <div className="pod-name">{fellow.podName}</div>
-          </div>
+
           <PortfolioSocialLinks fellow={fellow} />
-          <p>
+
+          <div className="body">
             <MDXProvider components={shortcodes}>
               <MDXRenderer>{fellow.body}</MDXRenderer>
             </MDXProvider>
-          </p>
+          </div>
         </>
       )}
 

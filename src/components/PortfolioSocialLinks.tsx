@@ -5,18 +5,37 @@ import {
   SocialLinks,
   SocialType,
 } from '../data/fellow-type';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faGithub,
+  faLinkedin,
+  faTwitter,
+} from '@fortawesome/free-brands-svg-icons';
+
+const icons = {
+  github: faGithub,
+  linkedin: faLinkedin,
+  twitter: faTwitter,
+};
 
 function PortfolioSocialLinks({ fellow }: { fellow: Fellow }) {
   const SocialLink = ({ name }: { name: SocialType }) => {
     if (!fellow[name]) return null;
     return (
-      <a
-        href={`${SocialLinks[name]}/${fellow[name]}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <i className={`fab fa-${name}`} />
-      </a>
+      <div>
+        <a
+          href={`${SocialLinks[name]}/${fellow[name]}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FontAwesomeIcon
+            className="portfolio-social-icon"
+            size="lg"
+            icon={icons[name]}
+            color="#73737D"
+          />
+        </a>
+      </div>
     );
   };
 

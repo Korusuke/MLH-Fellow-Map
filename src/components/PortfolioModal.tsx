@@ -4,26 +4,30 @@ import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { MDXProvider } from '@mdx-js/react';
 import { Link } from 'gatsby';
+import PortfolioSocialLinks from './PortfolioSocialLinks';
+
 const shortcodes = { a: Link }; // Provide common components here
+
 function PortfolioModal({ fellow }: { fellow: Fellow }) {
   return (
-    <div className="portfolio-modal">
+    <div className="portfolio-page">
       {fellow && (
         <>
           <img
-            className="profile-image"
+            className="modal-profile-image"
             src={fellow.profilePictureUrl}
             alt={`Profile of ${fellow.name}`}
           />
-          <h3>{fellow.name}</h3>
-          <p>{fellow.bio}</p>
-          <p>{fellow.podId}</p>
-          <p>{fellow.podName}</p>
-          <p>
+          <div className="heading">{fellow.name}</div>
+          <div className="subheading">{fellow.bio}</div>
+
+          <PortfolioSocialLinks fellow={fellow} />
+
+          <div className="body">
             <MDXProvider components={shortcodes}>
               <MDXRenderer>{fellow.body}</MDXRenderer>
             </MDXProvider>
-          </p>
+          </div>
         </>
       )}
 
