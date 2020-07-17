@@ -9,7 +9,7 @@ import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
-import { githubParser } from '../lib/github';
+import { githubParser, GithubProfile } from '../lib/github';
 import {
   Fellow,
   FellowType,
@@ -52,11 +52,14 @@ const IndexPage = ({
 
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = new Fellow(
+        githubProfiles.find(
+          (profile) =>
+            profile.username.toLowerCase() ===
+            allProfiles[i]?.frontmatter?.github?.toLowerCase(),
+        ) as GithubProfile,
+        allImageSharp,
         allProfiles[i].frontmatter as FellowType,
         allProfiles[i].body,
-        //  allProfiles[i].fields.slug,
-        allImageSharp,
-        githubProfiles,
       );
 
       if (!showLayers[fellow.podId]) continue;

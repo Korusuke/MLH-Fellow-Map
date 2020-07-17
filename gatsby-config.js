@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   plugins: [
+    'gatsby-plugin-ts-config', // allows ts configs mainly for gatsby-node.ts
     'gatsby-plugin-graphql-codegen', // for typescript GraphQL Typing
     'gatsby-plugin-sass',
     'gatsby-plugin-react-helmet',

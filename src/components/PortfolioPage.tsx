@@ -26,11 +26,13 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
           <div className="u-margin-top">
             <img src={`http://ghchart.rshah.org/${fellow.github}`} />
           </div>
-          <div className="body">
-            <MDXProvider components={shortcodes}>
-              <MDXRenderer>{fellow.body}</MDXRenderer>
-            </MDXProvider>
-          </div>
+          {fellow.body && (
+            <div className="body">
+              <MDXProvider components={shortcodes}>
+                <MDXRenderer>{fellow.body}</MDXRenderer>
+              </MDXProvider>
+            </div>
+          )}
         </>
       )}
     </div>

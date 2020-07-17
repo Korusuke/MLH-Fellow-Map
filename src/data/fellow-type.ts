@@ -2,12 +2,12 @@ import { FellowDataQuery } from '../../graphql-types';
 import { GithubProfile } from '../lib/github';
 
 export type FellowType = {
-  name: string;
-  profilepic: string; // link or name of locally stored image
-  bio: string;
-  lat: string | number;
-  long: string | number;
-} & { [k in SocialType]?: string };
+  name?: string | null;
+  profilepic?: string | null; // link or name of locally stored image
+  bio?: string | null;
+  lat?: string | number | null;
+  long?: string | number | null;
+} & { [k in SocialType]?: string | null };
 
 export const SocialLinks = {
   github: 'https://github.com',
@@ -23,7 +23,6 @@ export class Fellow implements FellowType {
   linkedin?: string;
   long: number;
   name: string;
-  profilepic: string;
   twitter?: string;
   website?: string;
   company?: string;
@@ -31,35 +30,38 @@ export class Fellow implements FellowType {
   podName: string;
   podId: string;
 
-  body: string;
+  body?: string;
 
   // slug: string;
 
   profilePictureUrl?: string;
 
   constructor(
-    { profilepic, name, lat, bio, github, linkedin, long, twitter }: FellowType,
-    body: string,
-    // slug: string,
+    githubProfile: GithubProfile,
     allImageSharp: FellowDataQuery['allImageSharp'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    githubProfiles: GithubProfile[],
+    fellow?: FellowType | null,
+    body?: string,
   ) {
-    const githubProfile = githubProfiles.find((ele) => {
-      return ele.username.toLowerCase() === github?.toLowerCase();
-    });
+    const { profilepic, name, lat, bio, linkedin, long, twitter } =
+      fellow || {};
 
-    if (!githubProfile)
-      throw new Error("Can't find github profile for: " + name);
+    if (!githubProfile) {
+      console.log(fellow);
+      throw new Error('No github profile given for ' + fellow?.github);
+    }
+    if (
+      fellow?.github &&
+      fellow.github.toLowerCase() !== githubProfile.username.toLowerCase()
+    )
+      throw new Error('Mismatch between given MDX fellow and Github Fellow!');
 
     this.name = name || githubProfile.name;
-    this.profilepic = profilepic;
     this.bio = bio || githubProfile.bio || '';
-    this.github = github as string;
+    this.github = githubProfile.username;
     this.twitter = twitter || githubProfile.twitter_username;
-    this.linkedin = linkedin;
-    this.lat = parseFloat(lat as string);
-    this.long = parseFloat(long as string);
+    this.linkedin = linkedin || undefined;
+    this.lat = parseFloat(lat as string) || 0;
+    this.long = parseFloat(long as string) || 0;
     this.website = githubProfile.website_url;
     this.company = githubProfile.company;
 
