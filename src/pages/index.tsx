@@ -70,7 +70,7 @@ const IndexPage = ({
         ) || undefined,
       );
       if (!showLayers[fellow.podId]) continue;
-      const center = new L.LatLng(fellow.lat, fellow.long);
+      const center = { lat: fellow.lat, lng: fellow.long };
 
       ret.push(
         <Marker
