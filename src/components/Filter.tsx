@@ -8,8 +8,6 @@ const Filters = ({
 }: {
   layers: { [k in string]: boolean };
   setLayers: (val: { [k in string]: boolean }) => void;
-  layers: { [k: string]: boolean };
-  setLayers: (val: { [k: string]: boolean }) => void;
 }) => {
   const selectOptions = _.map(layers, (layer, key) => ({
     value: key,
@@ -20,9 +18,9 @@ const Filters = ({
     event: Array<{ value: string; label: string }> | null | undefined,
   ) {
     if (Array.isArray(event) && event.length === 0) event = null;
-    const selectedLayers = _.map(event, layer => layer.label);
+    const selectedLayers = _.map(event, (layer) => layer.label);
     const newLayers: { [x: string]: boolean } = {};
-    _.forEach(selectOptions, option => {
+    _.forEach(selectOptions, (option) => {
       newLayers[option.label] = event
         ? _.includes(selectedLayers, option.label)
         : true;
