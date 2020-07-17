@@ -1,7 +1,11 @@
 $profile-pic-size: 200px;
 .portfolio-page {
   background-color: #fafafa;
-  background-image: linear-gradient(180deg, rgba(217, 219, 224, 0) 80%, #D9DBE0 100%);
+  background-image: linear-gradient(
+    180deg,
+    rgba(217, 219, 224, 0) 80%,
+    #d9dbe0 100%
+  );
   position: relative;
 
   width: 100%;
@@ -11,10 +15,9 @@ $profile-pic-size: 200px;
   align-items: center;
   transition: all 0.3s ease-in-out;
 
- /*   top: 30vh;
+  /*   top: 30vh;
   min-height: 70vh;
   overflow-y: visible;*/
-
 
   .profile-image {
     border-radius: 50%;
@@ -41,30 +44,30 @@ $profile-pic-size: 200px;
     font-family: sans-serif;
     color: black;
     margin-bottom: 15px;
-    font-weight: 600;  
+    font-weight: 600;
   }
 
   .subheading {
     margin: 0 auto;
     max-width: 450px;
-    color: #73737D;
+    color: #73737d;
     font-size: 18px;
     font-family: sans-serif;
     line-height: 1.4;
     text-align: center;
   }
 
-  .portfolio-social-links{
+  .portfolio-social-links {
     display: flex;
     align-items: center;
     margin-top: 35px;
   }
 
-  i{
+  i {
     font-size: 1.4rem;
   }
 
-  a{
+  a {
     text-decoration: none;
     color: inherit !important;
   }
@@ -74,7 +77,8 @@ $profile-pic-size: 200px;
     margin-right: 1.6rem;
     &:hover {
       color: black;
-    } * {
+    }
+    * {
       transition: color 0.25s ease-in-out;
     }
   }
@@ -104,11 +108,22 @@ $profile-pic-size: 200px;
     margin-top: 20px;
   }
 
+  .u-margin-top-lg {
+    margin-top: 30px;
+  }
+
   .modal-pod {
     font-size: 16px;
     font-family: sans-serif;
     font-weight: 500;
   }
+
+  .u-margin-bottom {
+    margin-bottom: 300px;
+  }
+
+  .u-color-green {
+    color: #21af90;
+  }
+
 }
-
-
