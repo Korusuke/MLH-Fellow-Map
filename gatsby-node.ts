@@ -1,6 +1,14 @@
 import * as path from 'path';
 import { githubParser } from './src/lib/github';
 
+exports.onCreatePage = ({ page, actions }: any) => {
+  const { createPage, deletePage } = actions;
+  if (page.path === '/xxx') {
+    deletePage(page);
+    createPage({ ...page, context: { ...page.context, hello: 'world' } }); //todo input location data
+  }
+};
+
 export const createPages = async ({ graphql, actions, reporter }: any) => {
   // destructure the createPage function from the actions object
   const { createPage } = actions;
@@ -43,6 +51,7 @@ export const createPages = async ({ graphql, actions, reporter }: any) => {
                     }
                     name
                     description
+                    avatarUrl
                   }
                 }
               }

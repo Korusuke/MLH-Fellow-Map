@@ -176,7 +176,6 @@ export const profiles = graphql`
           long
           name
           profilepic
-          title
           twitter
         }
       }
@@ -218,6 +217,7 @@ export const profiles = graphql`
                   }
                   name
                   description
+                  avatarUrl
                 }
               }
             }

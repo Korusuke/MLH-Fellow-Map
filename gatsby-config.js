@@ -64,6 +64,7 @@ module.exports = {
                           node {
                             description
                             name
+                            avatarUrl
                             id
                             members {
                               nodes {

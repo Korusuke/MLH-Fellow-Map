@@ -29,6 +29,7 @@ export class Fellow implements FellowType {
 
   podName: string;
   podId: string;
+  podLogoUrl?: string;
 
   body?: string;
 
@@ -67,6 +68,7 @@ export class Fellow implements FellowType {
 
     this.podName = githubProfile.pod; // more like teamname, includes mentors and mlh staff
     this.podId = githubProfile.pod_id;
+    this.podLogoUrl = githubProfile.podLogoUrl;
 
     this.body = body;
     // this.slug = slug;

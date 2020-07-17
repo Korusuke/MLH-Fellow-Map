@@ -18,6 +18,7 @@ export type GithubProfile = {
 
   pod: string;
   pod_id: string;
+  podLogoUrl?: string;
 };
 
 export function githubParser(
@@ -58,6 +59,7 @@ export function githubParser(
         company: user.company || undefined,
         pod: getPodName(team.name as string, team.description as string),
         pod_id: team.name as string,
+        podLogoUrl: team.avatarUrl || undefined,
       });
     });
   });

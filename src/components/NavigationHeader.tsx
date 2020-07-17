@@ -8,10 +8,10 @@ function NavigationHeader({ fellow }: { fellow: Fellow }) {
       <a href={`/`} target="_blank" rel="noreferrer">
         <Logo />
       </a>
-      <div></div>
       <div className="pod">
         <div className="pod-id"> {fellow.podId} </div>
         <div className="pod-name">{fellow.podName}</div>
+        <img src={fellow.podLogoUrl} alt={fellow.podName} />
       </div>
     </div>
   );
