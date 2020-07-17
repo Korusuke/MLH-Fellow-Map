@@ -1,4 +1,5 @@
-# MLH Fellow Locator
+# MLH Fellow Map
+<img src="https://imgur.com/7aGHaWN.png" width="400"/>
 
 Link to [Map](https://mlh-fellows.surge.sh)
 

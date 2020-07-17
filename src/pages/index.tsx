@@ -4,7 +4,6 @@ import L from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
-import PortfolioModal from '../components/PortfolioModal';
 import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
@@ -28,17 +27,12 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMdx, allImageSharp, allGithubData },
+  data: { allMdx, allImageSharp, allGithubData, githubData: locationData },
 }: {
   data: FellowDataQuery;
 }) => {
-  const githubProfiles = githubParser(
-    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
-  );
+  const githubProfiles = githubParser(allGithubData.nodes[0].data);
   const allProfiles = allMdx.nodes;
-
-  const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
-  const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
   const createClusterCustomIcon = (cluster: { getChildCount: () => void }) => {
     return L.divIcon({
@@ -48,7 +42,7 @@ const IndexPage = ({
     });
   };
 
-  const layers = {};
+  const layers: { [k in string]: boolean } = {};
   githubProfiles.forEach((ele) => {
     layers[ele.pod_id] = true;
   });
@@ -56,16 +50,26 @@ const IndexPage = ({
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
-
-    for (let i = 0; i < allProfiles.length; i++) {
-      const fellow = new Fellow(
-        allProfiles[i].frontmatter as FellowType,
-        allProfiles[i].body,
-        //  allProfiles[i].fields.slug,
-        allImageSharp,
-        githubProfiles,
+    const alreadyAdded: string[] = [];
+    for (const githubProfile of githubProfiles) {
+      if (alreadyAdded.includes(githubProfile.username)) continue;
+      alreadyAdded.push(githubProfile.username);
+      const mdx = allProfiles.find(
+        (profile) =>
+          profile?.frontmatter?.github?.toLowerCase() ===
+          githubProfile.username.toLowerCase(),
       );
 
+      const fellow = new Fellow(
+        githubProfile,
+        allImageSharp,
+        mdx?.frontmatter as FellowType,
+        mdx?.body,
+        locationData?.fields?.memberLocationMap?.find(
+          (loc) =>
+            loc?.name?.toLowerCase() === githubProfile.username.toLowerCase(),
+        ) || undefined,
+      );
       if (!showLayers[fellow.podId]) continue;
       const center = [fellow.lat, fellow.long];
       ret.push(
@@ -89,15 +93,12 @@ const IndexPage = ({
           }
         >
           <Popup>
-            <MapPopup
-              setPortfolioModalOpen={setPortfolioModalOpen}
-              setChosenFellow={setChosenFellow}
-              fellow={fellow}
-            />
+            <MapPopup fellow={fellow} />
           </Popup>
         </Marker>,
       );
     }
+    console.log(ret.length);
     return (
       <MarkerClusterGroup
         showCoverageOnHover={false}
@@ -107,13 +108,7 @@ const IndexPage = ({
         {ret}
       </MarkerClusterGroup>
     );
-  }, [
-    setPortfolioModalOpen,
-    setChosenFellow,
-    showLayers,
-    allImageSharp,
-    allMdx,
-  ]);
+  }, [showLayers, allImageSharp, allMdx]);
 
   const mapSettings = {
     center: CENTER,
@@ -132,25 +127,11 @@ const IndexPage = ({
       </Helmet>
       <Map {...mapSettings}>{markers}</Map>
       <Filters layers={showLayers} setLayers={setShowLayers} />
-      {/* <Route
-        path={'/test'}
-        render={() => {
-          <PortfolioModal/>;
-        }}
-      /> */}
     </Layout>
   );
 };
 
-function MapPopup({
-  fellow,
-  setChosenFellow,
-  setPortfolioModalOpen,
-}: {
-  fellow: Fellow;
-  setChosenFellow: (val: Fellow) => void;
-  setPortfolioModalOpen: (val: boolean) => void;
-}) {
+function MapPopup({ fellow }: { fellow: Fellow }) {
   const SocialLink = ({ name }: { name: SocialType }) => {
     if (!fellow[name]) return null;
     return (
@@ -208,7 +189,6 @@ export const profiles = graphql`
           long
           name
           profilepic
-          title
           twitter
         }
       }
@@ -250,10 +230,20 @@ export const profiles = graphql`
                   }
                   name
                   description
+                  avatarUrl
                 }
               }
             }
           }
+        }
+      }
+    }
+    githubData {
+      fields {
+        memberLocationMap {
+          lat
+          long
+          name
         }
       }
     }
