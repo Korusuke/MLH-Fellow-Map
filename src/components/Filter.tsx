@@ -1,14 +1,24 @@
 import React from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
+import { ValueType } from 'react-select/src/types';
 
-const Filters = ({ layers, setLayers }) => {
+const Filters = ({
+  layers,
+  setLayers,
+}: {
+  layers: { [k: string]: boolean };
+  setLayers: (val: { [k: string]: boolean }) => void;
+}) => {
   const selectOptions = _.map(layers, (layer, key) => ({
     value: key,
     label: key,
   }));
 
-  function handleLayer(event: any) {
+  function handleLayer(
+    event: Array<{ value: string; label: string }> | null | undefined,
+  ) {
+    if (Array.isArray(event) && event.length === 0) event = null;
     const selectedLayers = _.map(event, (layer) => layer.label);
     const newLayers: { [x: string]: boolean } = {};
     _.forEach(selectOptions, (option) => {
@@ -26,7 +36,7 @@ const Filters = ({ layers, setLayers }) => {
         options={selectOptions}
         isMulti
         closeMenuOnSelect={false}
-      ></Select>
+      />
     </div>
   );
 };
