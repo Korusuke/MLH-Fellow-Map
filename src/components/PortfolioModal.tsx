@@ -30,14 +30,17 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
           <PortfolioSocialLinks fellow={fellow} />
 
           {fellow.body && (
-            <div className="body">
+            <div className="portfolio-body">
               <MDXProvider components={shortcodes}>
                 <MDXRenderer>{fellow.body}</MDXRenderer>
               </MDXProvider>
             </div>
           )}
           <div>
-            <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+            <img
+              className="flame-graph"
+              src={`http://ghchart.rshah.org/${fellow.github}`}
+            />
           </div>
           <div className="u-margin-top u-margin-bottom">
             <a
