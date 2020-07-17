@@ -1,6 +1,45 @@
 import { FellowDataQuery } from '../../graphql-types';
 import { GithubProfile } from '../lib/github';
 
+export const githubQuery = ` 
+      allGithubData {
+        nodes {
+          data {
+            organization {
+              teams {
+                edges {
+                  node {
+                    members {
+                      nodes {
+                        avatarUrl
+                        bio
+                        company
+                        email
+                        followers {
+                          totalCount
+                        }
+                        following {
+                          totalCount
+                        }
+                        login
+                        name
+                        twitterUsername
+                        url
+                        websiteUrl
+                        location
+                      }
+                    }
+                    name
+                    description
+                    avatarUrl
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`;
+
 export type FellowType = {
   name?: string | null;
   profilepic?: string | null; // link or name of locally stored image

@@ -1,11 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as path from 'path';
 import { githubParser } from './src/lib/github';
+import { githubQuery } from './src/data/fellow-type';
 
-exports.onCreatePage = ({ page, actions }: any) => {
+//let changedIndex = false;
+/*export const onCreatePage = async ({ page, actions, graphql }: any) => {
   const { createPage, deletePage } = actions;
-  if (page.path === '/xxx') {
+
+  if (page.path === '/' && !changedIndex) {
+    const result: any = await graphql(githubQuery);
+    console.log(result.data.allGithubData);
+
     deletePage(page);
     createPage({ ...page, context: { ...page.context, hello: 'world' } }); //todo input location data
+    changedIndex = true;
+  }
+};*/
+
+export const onCreateNode = ({ node, getNode, actions }: any) => {
+  const { createNodeField } = actions;
+
+  if (node.internal.type === 'GithubData') {
+    console.log(JSON.stringify(node));
+    createNodeField({
+      node,
+      name: 'test',
+      value: ['hellow', 'world!'],
+    });
   }
 };
 
@@ -22,49 +43,15 @@ export const createPages = async ({ graphql, actions, reporter }: any) => {
           }
         }
       }
-      allGithubData {
-        nodes {
-          data {
-            organization {
-              teams {
-                edges {
-                  node {
-                    members {
-                      nodes {
-                        avatarUrl
-                        bio
-                        company
-                        email
-                        followers {
-                          totalCount
-                        }
-                        following {
-                          totalCount
-                        }
-                        login
-                        name
-                        twitterUsername
-                        url
-                        websiteUrl
-                        location
-                      }
-                    }
-                    name
-                    description
-                    avatarUrl
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      ${githubQuery}
     }
   `);
   if (result.errors) {
     reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query');
   }
   // create profile pages
+  // setfields on graphql node type
+  //createResolvers
   const profiles = result.data.allMdx.nodes;
   const githubProfiles = githubParser(result.data.allGithubData.nodes[0].data);
 
