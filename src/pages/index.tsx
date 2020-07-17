@@ -9,7 +9,7 @@ import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
-import { githubParser, GithubProfile } from '../lib/github';
+import { githubParser } from '../lib/github';
 import {
   Fellow,
   FellowType,
@@ -49,7 +49,10 @@ const IndexPage = ({
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
+    const alreadyAdded: string[] = [];
     for (const githubProfile of githubProfiles) {
+      if (alreadyAdded.includes(githubProfile.username)) continue;
+      alreadyAdded.push(githubProfile.username);
       const mdx = allProfiles.find(
         (profile) =>
           profile?.frontmatter?.github?.toLowerCase() ===
@@ -68,19 +71,14 @@ const IndexPage = ({
       );
       if (!showLayers[fellow.podId]) continue;
       const center = new L.LatLng(fellow.lat, fellow.long);
+
       ret.push(
         <Marker
           position={center}
-          key={fellow.name + fellow.lat}
+          key={githubProfile.username}
           icon={L.icon({
             className: 'icon',
-            iconUrl:
-              fellow.profilePictureUrl ||
-              allImageSharp.nodes.find((ele) => {
-                if (!ele || !ele.fluid) return false;
-                return ele.fluid.originalName === 'mlh.png';
-              })?.fluid?.src ||
-              'none',
+            iconUrl: fellow.profilePictureUrl || 'none',
             iconSize: [50, 50],
           })}
         >
@@ -90,7 +88,7 @@ const IndexPage = ({
         </Marker>,
       );
     }
-
+    console.log(ret.length);
     return (
       <MarkerClusterGroup
         showCoverageOnHover={false}
