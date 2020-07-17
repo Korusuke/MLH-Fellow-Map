@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
-import { ValueType } from 'react-select/src/types';
 
 const Filters = ({
   layers,
@@ -32,13 +31,16 @@ const Filters = ({
   }
 
   return (
-    <div className="filter">
-      <Select
-        onChange={handleLayer}
-        options={selectOptions}
-        isMulti
-        closeMenuOnSelect={false}
-      />
+    <div className="container filter row">
+      <div className="col-md-4 offset-md-8 pr-1">
+        <Select
+          onChange={handleLayer}
+          options={selectOptions}
+          isMulti
+          placeholder="Filter based on team"
+          closeMenuOnSelect={false}
+        />
+      </div>
     </div>
   );
 };
