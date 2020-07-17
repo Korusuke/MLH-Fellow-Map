@@ -1,5 +1,8 @@
-$profile-pic-size: 200px;
 .filter {
-  width: 20vw;
   float: right;
+  right: 0;
+
+  .toggle-button {
+    position: relative;
+  }
 }
