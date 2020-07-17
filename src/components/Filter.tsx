@@ -1,11 +1,17 @@
 import React, { ReactElement } from 'react';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 
-const Filters = ({ layers, setLayers }) => {
-  const y = [];
+const Filters = ({
+  layers,
+  setLayers,
+}: {
+  layers: { [k in string]: boolean };
+  setLayers: (val: { [k in string]: boolean }) => void;
+}) => {
+  const filterOptions: ReactElement[] = [];
   Object.keys(layers).map(function (key, index) {
-    y.push(
-      <FormGroup check>
+    filterOptions.push(
+      <FormGroup key={index} check>
         <Label check>
           <Input
             type="checkbox"
@@ -28,7 +34,7 @@ const Filters = ({ layers, setLayers }) => {
 
   return (
     <div id="filters">
-      <Form>{y}</Form>
+      <Form>{filterOptions}</Form>
     </div>
   );
 };

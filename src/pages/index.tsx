@@ -4,13 +4,12 @@ import L from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Layout from '../components/Layout';
 import Map from '../components/Map';
-import PortfolioModal from '../components/PortfolioModal';
 import Filters from '../components/Filter';
 import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
-import { githubParser } from '../lib/github';
+import { githubParser, GithubProfile } from '../lib/github';
 import {
   Fellow,
   FellowType,
@@ -31,13 +30,8 @@ const IndexPage = ({
 }: {
   data: FellowDataQuery;
 }) => {
-  const githubProfiles = githubParser(
-    allGithubData.nodes[0]?.data?.organization?.teams?.edges,
-  );
+  const githubProfiles = githubParser(allGithubData.nodes[0].data);
   const allProfiles = allMdx.nodes;
-
-  const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
-  const [chosenFellow, setChosenFellow] = useState<Fellow | null>(null);
 
   const createClusterCustomIcon = (cluster: { getChildCount: () => void }) => {
     return L.divIcon({
@@ -47,7 +41,7 @@ const IndexPage = ({
     });
   };
 
-  const layers = {};
+  const layers: { [k in string]: boolean } = {};
   githubProfiles.forEach((ele) => {
     layers[ele.pod_id] = true;
   });
@@ -58,11 +52,14 @@ const IndexPage = ({
 
     for (let i = 0; i < allProfiles.length; i++) {
       const fellow = new Fellow(
+        githubProfiles.find(
+          (profile) =>
+            profile.username.toLowerCase() ===
+            allProfiles[i]?.frontmatter?.github?.toLowerCase(),
+        ) as GithubProfile,
+        allImageSharp,
         allProfiles[i].frontmatter as FellowType,
         allProfiles[i].body,
-        //  allProfiles[i].fields.slug,
-        allImageSharp,
-        githubProfiles,
       );
 
       if (!showLayers[fellow.podId]) continue;
@@ -84,11 +81,7 @@ const IndexPage = ({
           })}
         >
           <Popup>
-            <MapPopup
-              setPortfolioModalOpen={setPortfolioModalOpen}
-              setChosenFellow={setChosenFellow}
-              fellow={fellow}
-            />
+            <MapPopup fellow={fellow} />
           </Popup>
         </Marker>,
       );
@@ -102,13 +95,7 @@ const IndexPage = ({
         {ret}
       </MarkerClusterGroup>
     );
-  }, [
-    setPortfolioModalOpen,
-    setChosenFellow,
-    showLayers,
-    allImageSharp,
-    allMdx,
-  ]);
+  }, [showLayers, allImageSharp, allMdx]);
 
   const mapSettings = {
     center: CENTER,
@@ -127,25 +114,11 @@ const IndexPage = ({
       </Helmet>
       <Map {...mapSettings}>{markers}</Map>
       <Filters layers={showLayers} setLayers={setShowLayers} />
-      {/* <Route
-        path={'/test'}
-        render={() => {
-          <PortfolioModal/>;
-        }}
-      /> */}
     </Layout>
   );
 };
 
-function MapPopup({
-  fellow,
-  setChosenFellow,
-  setPortfolioModalOpen,
-}: {
-  fellow: Fellow;
-  setChosenFellow: (val: Fellow) => void;
-  setPortfolioModalOpen: (val: boolean) => void;
-}) {
+function MapPopup({ fellow }: { fellow: Fellow }) {
   const SocialLink = ({ name }: { name: SocialType }) => {
     if (!fellow[name]) return null;
     return (
@@ -203,7 +176,6 @@ export const profiles = graphql`
           long
           name
           profilepic
-          title
           twitter
         }
       }
@@ -245,6 +217,7 @@ export const profiles = graphql`
                   }
                   name
                   description
+                  avatarUrl
                 }
               }
             }

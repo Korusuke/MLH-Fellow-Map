@@ -1,23 +1,35 @@
-export function githubParser(teams) {
-  const users: {
-    name: string;
-    profilepic: string;
-    bio: string;
-    email: string;
-    followers: unknown;
-    following: unknown;
-    location: string;
-    username: string;
-    username_original: string;
-    twitter_username: string;
-    website_url: string;
-    company: string;
-    pod: string;
-    pod_id: string;
-  }[] = [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  teams.forEach((obj: { node: any }) => {
+import { FellowDataQuery } from '../../graphql-types';
+
+type ArrayType<T extends Array<unknown>> = T extends Array<infer U> ? U : never;
+
+export type GithubProfile = {
+  name: string;
+  email: string;
+  followers: number;
+  following: number;
+  username: string;
+
+  twitter_username?: string;
+  website_url?: string;
+  company?: string;
+  profilepic?: string;
+  bio?: string;
+  location?: string;
+
+  pod: string;
+  pod_id: string;
+  podLogoUrl?: string;
+};
+
+export function githubParser(
+  githubData: ArrayType<FellowDataQuery['allGithubData']['nodes']>['data'],
+) {
+  const users: GithubProfile[] = [];
+
+  githubData?.organization?.teams?.edges?.forEach((obj) => {
+    if (!obj || !obj.node) return;
     const team = obj.node;
+    if (!team.name || !team.members) return;
 
     // Skip the parent teams; CTF would include people in other pods, so ignore that too
     if (
@@ -30,22 +42,24 @@ export function githubParser(teams) {
       return;
 
     const members = team.members.nodes;
+    if (!members) return;
     members.forEach((user) => {
+      if (!user) return;
       users.push({
-        name: user.name,
-        profilepic: user.avatarUrl,
-        bio: user.bio,
-        email: user.email,
-        followers: user.followers.totalCount,
-        following: user.following.totalCount,
-        location: user.location,
-        username: user.login,
-        username_original: user.login,
-        twitter_username: user.twitterUsername,
-        website_url: user.websiteUrl,
-        company: user.company,
-        pod: getPodName(team.name, team.description),
-        pod_id: team.name,
+        name: user.name as string,
+        profilepic: user.avatarUrl || undefined,
+        bio: user.bio || undefined,
+        email: user.email as string,
+        followers: user.followers?.totalCount as number,
+        following: user.following?.totalCount as number,
+        location: user.location || undefined,
+        username: user.login as string,
+        twitter_username: user.twitterUsername || undefined,
+        website_url: user.websiteUrl || undefined,
+        company: user.company || undefined,
+        pod: getPodName(team.name as string, team.description as string),
+        pod_id: team.name as string,
+        podLogoUrl: team.avatarUrl || undefined,
       });
     });
   });
