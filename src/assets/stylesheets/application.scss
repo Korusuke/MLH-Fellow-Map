@@ -84,23 +84,26 @@ main {
   content: "";
   float: left;
   position: absolute;
-  background: url('/cap.png') no-repeat 0 0;
+  background: rgb(2, 131, 2) no-repeat 0 0;
   background-size: 100%;
-  width: 50px;
-  height: 50px;
-  top: -45px;
-  left: 25px;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  top: 0px;
+  left: 60px;
   z-index: 100;
 }
 
-.Staff::before{
+.Mentor::before{
   content: "";
   float: left;
   position: absolute;
-  background: url('/tie.png') no-repeat 0 0;
+  background: rgb(105, 207, 105) no-repeat 0 0;
   background-size: 100%;
-  width: 50px;
-  height: 50px;
-  top: 25px;
-  left: 25px;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  top: 0px;
+  left: 60px;
+  z-index: 100;
 }
