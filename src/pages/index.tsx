@@ -9,7 +9,7 @@ import { Button } from 'reactstrap';
 // Auto generated via Gatsby Develop Plugin. May need to run 'yarn develop' for it to appear
 import { FellowDataQuery } from '../../graphql-types';
 import { Marker, Popup } from 'react-leaflet';
-import { githubParser, GithubProfile } from '../lib/github';
+import { githubParser } from '../lib/github';
 import {
   Fellow,
   FellowType,
@@ -26,7 +26,7 @@ const CENTER = [LOCATION.lat, LOCATION.lng];
 const DEFAULT_ZOOM = 3;
 
 const IndexPage = ({
-  data: { allMdx, allImageSharp, allGithubData },
+  data: { allMdx, allImageSharp, allGithubData, githubData: locationData },
 }: {
   data: FellowDataQuery;
 }) => {
@@ -49,34 +49,36 @@ const IndexPage = ({
   // we likely don't want to generate this every render haha
   const markers = useMemo(() => {
     const ret: ReactElement[] = [];
-
-    for (let i = 0; i < allProfiles.length; i++) {
-      const fellow = new Fellow(
-        githubProfiles.find(
-          (profile) =>
-            profile.username.toLowerCase() ===
-            allProfiles[i]?.frontmatter?.github?.toLowerCase(),
-        ) as GithubProfile,
-        allImageSharp,
-        allProfiles[i].frontmatter as FellowType,
-        allProfiles[i].body,
+    const alreadyAdded: string[] = [];
+    for (const githubProfile of githubProfiles) {
+      if (alreadyAdded.includes(githubProfile.username)) continue;
+      alreadyAdded.push(githubProfile.username);
+      const mdx = allProfiles.find(
+        (profile) =>
+          profile?.frontmatter?.github?.toLowerCase() ===
+          githubProfile.username.toLowerCase(),
       );
 
+      const fellow = new Fellow(
+        githubProfile,
+        allImageSharp,
+        mdx?.frontmatter as FellowType,
+        mdx?.body,
+        locationData?.fields?.memberLocationMap?.find(
+          (loc) =>
+            loc?.name?.toLowerCase() === githubProfile.username.toLowerCase(),
+        ) || undefined,
+      );
       if (!showLayers[fellow.podId]) continue;
       const center = new L.LatLng(fellow.lat, fellow.long);
+
       ret.push(
         <Marker
           position={center}
-          key={fellow.name + fellow.lat}
+          key={githubProfile.username}
           icon={L.icon({
             className: 'icon',
-            iconUrl:
-              fellow.profilePictureUrl ||
-              allImageSharp.nodes.find((ele) => {
-                if (!ele || !ele.fluid) return false;
-                return ele.fluid.originalName === 'mlh.png';
-              })?.fluid?.src ||
-              'none',
+            iconUrl: fellow.profilePictureUrl || 'none',
             iconSize: [50, 50],
           })}
         >
@@ -86,6 +88,7 @@ const IndexPage = ({
         </Marker>,
       );
     }
+    console.log(ret.length);
     return (
       <MarkerClusterGroup
         showCoverageOnHover={false}
@@ -222,6 +225,15 @@ export const profiles = graphql`
               }
             }
           }
+        }
+      }
+    }
+    githubData {
+      fields {
+        memberLocationMap {
+          lat
+          long
+          name
         }
       }
     }

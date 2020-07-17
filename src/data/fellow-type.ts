@@ -42,6 +42,7 @@ export class Fellow implements FellowType {
     allImageSharp: FellowDataQuery['allImageSharp'],
     fellow?: FellowType | null,
     body?: string,
+    githubCoords?: { lat?: number | null; long?: number | null },
   ) {
     const { profilepic, name, lat, bio, linkedin, long, twitter } =
       fellow || {};
@@ -61,8 +62,12 @@ export class Fellow implements FellowType {
     this.github = githubProfile.username;
     this.twitter = twitter || githubProfile.twitter_username;
     this.linkedin = linkedin || undefined;
-    this.lat = parseFloat(lat as string) || 0;
-    this.long = parseFloat(long as string) || 0;
+    this.lat = fellow
+      ? parseFloat(lat as string)
+      : githubCoords?.lat || -74.496413 + Math.random() * 5;
+    this.long = fellow
+      ? parseFloat(long as string)
+      : githubCoords?.long || 27.317572 + Math.random() * 50;
     this.website = githubProfile.website_url;
     this.company = githubProfile.company;
 
