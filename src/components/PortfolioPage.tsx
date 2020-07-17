@@ -25,7 +25,7 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
           <PortfolioSocialLinks fellow={fellow} />
 
           {fellow.body && (
-            <div className="body">
+            <div className="portfolio-body">
               <MDXProvider components={shortcodes}>
                 <MDXRenderer>{fellow.body}</MDXRenderer>
               </MDXProvider>

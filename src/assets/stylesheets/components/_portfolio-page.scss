@@ -75,6 +75,7 @@ $profile-pic-size: 200px;
   .portfolio-social-icon {
     margin-left: 1.6rem;
     margin-right: 1.6rem;
+    margin-bottom: 50px;
     &:hover {
       color: black;
     }
@@ -83,7 +84,7 @@ $profile-pic-size: 200px;
     }
   }
 
-  .body {
+  .portfolio-body {
     max-width: 680px;
     line-height: 1.756;
     font-size: 18px;
@@ -91,7 +92,6 @@ $profile-pic-size: 200px;
     width: 100%;
     font-family: sans-serif;
     color: black;
-    margin-top: 50px;
   }
 
   .modal-profile-image {
