@@ -1,45 +1,6 @@
 import { FellowDataQuery } from '../../graphql-types';
 import { GithubProfile } from '../lib/github';
 
-export const githubQuery = ` 
-      allGithubData {
-        nodes {
-          data {
-            organization {
-              teams {
-                edges {
-                  node {
-                    members {
-                      nodes {
-                        avatarUrl
-                        bio
-                        company
-                        email
-                        followers {
-                          totalCount
-                        }
-                        following {
-                          totalCount
-                        }
-                        login
-                        name
-                        twitterUsername
-                        url
-                        websiteUrl
-                        location
-                      }
-                    }
-                    name
-                    description
-                    avatarUrl
-                  }
-                }
-              }
-            }
-          }
-        }
-      }`;
-
 export type FellowType = {
   name?: string | null;
   profilepic?: string | null; // link or name of locally stored image
@@ -81,6 +42,7 @@ export class Fellow implements FellowType {
     allImageSharp: FellowDataQuery['allImageSharp'],
     fellow?: FellowType | null,
     body?: string,
+    githubCoords?: { lat?: number | null; long?: number | null },
   ) {
     const { profilepic, name, lat, bio, linkedin, long, twitter } =
       fellow || {};
@@ -100,8 +62,8 @@ export class Fellow implements FellowType {
     this.github = githubProfile.username;
     this.twitter = twitter || githubProfile.twitter_username;
     this.linkedin = linkedin || undefined;
-    this.lat = parseFloat(lat as string) || 0;
-    this.long = parseFloat(long as string) || 0;
+    this.lat = fellow ? parseFloat(lat as string) : githubCoords?.lat || 0;
+    this.long = fellow ? parseFloat(long as string) : githubCoords?.long || 0;
     this.website = githubProfile.website_url;
     this.company = githubProfile.company;
 

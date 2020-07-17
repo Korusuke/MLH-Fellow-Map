@@ -1,30 +1,5 @@
-import { FellowDataQuery } from '../../graphql-types';
-
-type ArrayType<T extends Array<unknown>> = T extends Array<infer U> ? U : never;
-
-export type GithubProfile = {
-  name: string;
-  email: string;
-  followers: number;
-  following: number;
-  username: string;
-
-  twitter_username?: string;
-  website_url?: string;
-  company?: string;
-  profilepic?: string;
-  bio?: string;
-  location?: string;
-
-  pod: string;
-  pod_id: string;
-  podLogoUrl?: string;
-};
-
-export function githubParser(
-  githubData: ArrayType<FellowDataQuery['allGithubData']['nodes']>['data'],
-) {
-  const users: GithubProfile[] = [];
+export function githubParser(githubData) {
+  const users = [];
 
   githubData?.organization?.teams?.edges?.forEach((obj) => {
     if (!obj || !obj.node) return;
@@ -46,19 +21,19 @@ export function githubParser(
     members.forEach((user) => {
       if (!user) return;
       users.push({
-        name: user.name as string,
+        name: user.name,
         profilepic: user.avatarUrl || undefined,
         bio: user.bio || undefined,
-        email: user.email as string,
-        followers: user.followers?.totalCount as number,
-        following: user.following?.totalCount as number,
+        email: user.email,
+        followers: user.followers?.totalCount,
+        following: user.following?.totalCount,
         location: user.location || undefined,
-        username: user.login as string,
+        username: user.login,
         twitter_username: user.twitterUsername || undefined,
         website_url: user.websiteUrl || undefined,
         company: user.company || undefined,
-        pod: getPodName(team.name as string, team.description as string),
-        pod_id: team.name as string,
+        pod: getPodName(team.name, team.description),
+        pod_id: team.name,
         podLogoUrl: team.avatarUrl || undefined,
       });
     });
@@ -67,7 +42,7 @@ export function githubParser(
   return users;
 }
 
-const getPodName = (name: string, description: string) => {
+const getPodName = (name, description) => {
   // 'name' is ID; 'description' is name
   if (name.startsWith('Pod')) {
     return description === '' ? name : description;
