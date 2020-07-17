@@ -35,7 +35,10 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
             )}
 
             <div className="u-margin-top">
-              <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+              <img
+                className="flame-graph"
+                src={`http://ghchart.rshah.org/${fellow.github}`}
+              />
             </div>
 
             <a

@@ -37,7 +37,10 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
             </div>
           )}
           <div>
-            <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+            <img
+              className="flame-graph"
+              src={`http://ghchart.rshah.org/${fellow.github}`}
+            />
           </div>
           <div className="u-margin-top u-margin-bottom">
             <a
