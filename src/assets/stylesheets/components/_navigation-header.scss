@@ -1,0 +1,38 @@
+.navContainer {
+  position: relative;
+  z-index: 100;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 75%;
+  margin-top: 5px;
+  margin-bottom: 40px;
+  @media only screen and (max-width: 1023px) {
+    width: 90%;  
+  }
+}
+
+.pod {
+  border: 2px #73737D solid;
+  background-color: white;
+  padding: 5px 15px 5px 15px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+.pod-id {
+  font-weight: 600;
+}
+
+.pod-name {
+  color:#73737D;
+  font-size: 14px;
+}
+
+.logoContainer {
+  margin-top: 10px;
+  margin-left: 10px;
+  display: block;
+}

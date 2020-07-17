@@ -1,62 +1,45 @@
-import React, { createRef, useEffect } from 'react';
-import { Button, Container } from 'reactstrap';
+import React from 'react';
 import { Fellow } from '../data/fellow-type';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { MDXProvider } from '@mdx-js/react';
+import { Link } from 'gatsby';
+import PortfolioSocialLinks from './PortfolioSocialLinks';
 
-function PortfolioModal({
-  isOpen,
-  setOpen,
-  fellow,
-}: {
-  isOpen: boolean;
-  setOpen: (val: boolean) => void;
-  fellow?: Fellow;
-}) {
-  const modalRef = createRef<HTMLDivElement>();
+const shortcodes = { a: Link }; // Provide common components here
 
-  useEffect(() => {
-    if (!modalRef.current) return;
-    const style = modalRef.current.style;
-    if (isOpen) {
-      style.minHeight = '70vh';
-      style.height = 'min-content';
-      style.overflowY = 'visible';
-      style.top = '30vh';
-    } else {
-      style.top = (null as unknown) as string;
-
-      setTimeout(() => {
-        style.minHeight = (null as unknown) as string;
-        style.overflowY = (null as unknown) as string;
-        style.height = (null as unknown) as string;
-      }, 300); // length of animation, may have to be changed in scss too if changed
-    }
-  }, [isOpen, modalRef.current]);
-
+function PortfolioModal({ fellow }: { fellow: Fellow }) {
   return (
-    <div className="portfolio-modal" ref={modalRef}>
+    <div className="portfolio-page">
       {fellow && (
         <>
           <img
-            className="profile-image"
+            className="modal-profile-image"
             src={fellow.profilePictureUrl}
             alt={`Profile of ${fellow.name}`}
           />
-          <h3>{fellow.name}</h3>
-          <p>{fellow.bio}</p>
-          <p>{fellow.podId}</p>
-          <p>{fellow.podName}</p>
-          <p>
-            <MDXRenderer>{fellow.body}</MDXRenderer>
-          </p>
+          <PortfolioSocialLinks fellow={fellow} />
+          <div className="heading">{fellow.name}</div>
+          <div className="subheading">{fellow.bio}</div>
+          <div className="pod u-margin-top">
+            &laquo;
+            <span className="modal-pod">
+              {' '}
+              {fellow.podId + ' : ' + fellow.podName}{' '}
+            </span>{' '}
+            &raquo;
+          </div>
+          <div className="u-margin-top">
+            <img src={`http://ghchart.rshah.org/${fellow.github}`} />
+          </div>
+          {fellow.body && (
+            <div className="body">
+              <MDXProvider components={shortcodes}>
+                <MDXRenderer>{fellow.body}</MDXRenderer>
+              </MDXProvider>
+            </div>
+          )}
         </>
       )}
-
-      <Button color="danger" onClick={() => setOpen(false)}>
-        Close
-      </Button>
-
-      <Container />
     </div>
   );
 }

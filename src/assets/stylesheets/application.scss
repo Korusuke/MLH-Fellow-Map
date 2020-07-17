@@ -59,6 +59,9 @@ main {
   border-radius: 100%;
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
   border: none;
+  width: 50px;
+  height: 50px;
+  transform: translateX(25px);
   transition: all 0.2s;
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
@@ -74,4 +77,30 @@ main {
   line-height: 46px;
   text-align: center;
   width: 50px;
+}
+
+
+.Staff::before{
+  content: "";
+  float: left;
+  position: absolute;
+  background: url('/cap.png') no-repeat 0 0;
+  background-size: 100%;
+  width: 50px;
+  height: 50px;
+  top: -45px;
+  left: 25px;
+  z-index: 100;
+}
+
+.Staff::before{
+  content: "";
+  float: left;
+  position: absolute;
+  background: url('/tie.png') no-repeat 0 0;
+  background-size: 100%;
+  width: 50px;
+  height: 50px;
+  top: 25px;
+  left: 25px;
 }

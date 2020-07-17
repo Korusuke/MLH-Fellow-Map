@@ -2,7 +2,6 @@
 <img src="https://imgur.com/7aGHaWN.png" width="400"/>
 </center>
 
-
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/korusuke/MLH-Fellow-Map/Gatsby%20Publish) ![GitHub license](https://img.shields.io/github/license/Korusuke/MLH-Fellow-Map) [![GitHub contributors](https://img.shields.io/github/contributors/Korusuke/MLH-Fellow-Map)](https://GitHub.com/Korusuke/MLH-Fellow-Map/graphs/contributors/)
 
 
