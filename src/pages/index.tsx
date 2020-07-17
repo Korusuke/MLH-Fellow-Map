@@ -67,7 +67,7 @@ const IndexPage = ({
       );
 
       if (!showLayers[fellow.podId]) continue;
-      const center = new L.LatLng(fellow.lat, fellow.long);
+      const center = [fellow.lat, fellow.long];
       ret.push(
         <Marker
           position={center}
