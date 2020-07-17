@@ -62,10 +62,10 @@ export class Fellow implements FellowType {
     this.github = githubProfile.username;
     this.twitter = twitter || githubProfile.twitter_username;
     this.linkedin = linkedin || undefined;
-    this.lat = fellow
+    this.lat = fellow?.lat
       ? parseFloat(lat as string)
       : githubCoords?.lat || -74.496413 + Math.random() * 5;
-    this.long = fellow
+    this.long = fellow?.long
       ? parseFloat(long as string)
       : githubCoords?.long || 27.317572 + Math.random() * 50;
     this.website = githubProfile.website_url;
