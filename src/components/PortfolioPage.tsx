@@ -43,7 +43,7 @@ function PortfolioPage({ fellow }: { fellow: Fellow }) {
 
             <a
               href={
-                'https://github.com/Korusuke/MLH-Fellow-Map/edit/v2/src/profiles'
+                'https://github.com/Korusuke/MLH-Fellow-Map/edit/master/src/profiles'
               }
               target="_blank"
               rel="noreferrer noopener"

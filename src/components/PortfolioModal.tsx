@@ -46,7 +46,7 @@ function PortfolioModal({ fellow }: { fellow: Fellow }) {
             <a
               className="u-color-green"
               href={
-                'https://github.com/Korusuke/MLH-Fellow-Map/tree/v2/src/profiles'
+                'https://github.com/Korusuke/MLH-Fellow-Map/tree/master/src/profiles'
               }
               target="_blank"
               rel="noreferrer noopener"
