@@ -11,13 +11,13 @@ Current deployment can be found at [fellowmap.space](https://fellowmap.space)
 
 v1.0 can be found at [mlh-fellows.surge.sh](https://mlh-fellows.surge.sh/)
 
-## What is FellowMap
+## What is FellowMap?
 
 Just a really cool world map that shows all the MLH Fellows, Mentors and MLH Staff. It's a place for fellows to show off their work and describe their journey to the world.
 
-## Why is FellowMap?
+## Why use FellowMap?
 
-Being the inaugural batch of MLH Fellowship we had no idea of what to expect or what is expected of us. This is effort to make the on-boarding process easier for future fellows by having experiences and journey of all past fellows in one place. 
+Being the inaugural batch of MLH Fellowship we had no idea of what to expect or what is expected of us. This is an effort to make the on-boarding process easier for future fellows by having experiences and journey of all past fellows in one place. 
 
 ## How to FellowMap?
 
@@ -51,3 +51,7 @@ Anything typed here will be part of your page. You can use *full* MDX capabiliti
 
 If you want to add more content like a blog post, special links or a lengthy memoir, you can always edit the `mdx` file and put the content below the basic profile description.
 Full MDX capabilites are provided, go crazy!
+
+
+### Try it out locally (Optional)
+If you wish to try out FellowMap locally, you can refer to [DEVELOPMENT.md](https://github.com/Korusuke/MLH-Fellow-Map/blob/master/DEVELOPMENT.md). This step is completely optional if you simply want to add your own profile, but it may be helpful if you wish to add a new feature! :)
