@@ -9,7 +9,7 @@ To start FellowMap locally, you can follow these steps:
 GITHUB_TOKEN=
 OPEN_CAGE_API_KEY=
 ```
-1. We're good to go! Run the following commands to start your development server.
+5. We're good to go! Run the following commands to start your development server.
 ```
 yarn install
 yarn start
