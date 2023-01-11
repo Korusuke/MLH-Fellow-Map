@@ -22,7 +22,7 @@
     "gatsby-plugin-sharp": "^2.6.9",
     "gatsby-source-filesystem": "^2.3.8",
     "gatsby-source-github-api": "^0.2.1",
-    "gatsby-transformer-remark": "^2.8.13",
+    "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^2.5.3",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.19",
